@@ -12,8 +12,8 @@ function MyMap() {
     let map = new mapboxgl.Map({
       container: 'map_container',
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [44, 56.32], // Moscow
-      zoom: 8
+      center: [44, 56.32], // NN
+      zoom: 15
     });
 
     setMap(map);
