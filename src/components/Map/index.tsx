@@ -11,10 +11,21 @@ function MyMap() {
   useEffect(() => {
     let map = new mapboxgl.Map({
       container: 'map_container',
-      style: 'mapbox://styles/mapbox/streets-v11'
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [44, 56.32], // Moscow
+      zoom: 8
     });
 
-    setMap(map)
+    setMap(map);
+
+    map.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true
+        },
+        trackUserLocation: true
+      })
+    );
   }, [])
   return (
     <div id="map_container" className={styles.map} />
