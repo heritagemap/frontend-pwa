@@ -23,8 +23,16 @@ function MyMap() {
         positionOptions: {
           enableHighAccuracy: true
         },
-        trackUserLocation: true
+        trackUserLocation: true,
+        showAccuracyCircle: false,
       })
+    );
+
+    map.addControl(
+      new mapboxgl.NavigationControl({
+        showCompass: false,
+      }),
+      'top-right',
     );
   }, [])
   return (
