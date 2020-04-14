@@ -93,4 +93,4 @@ jobs:
           docker pull $IMAGE:latest
           docker stop frontend-pwa || true
           docker rm frontend-pwa || true
-          docker run -d --name frontend-pwa -h frontend-pwa $IMAGE:latest
+          docker run -d --name frontend-pwa --network bridge $IMAGE:latest
