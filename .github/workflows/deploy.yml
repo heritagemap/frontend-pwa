@@ -48,7 +48,7 @@ jobs:
 
     - name: Push image
       run: |
-        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/image
+        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/frontend-pwa
 
         # Change all uppercase to lowercase
         IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -79,7 +79,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GITHUB_ACTOR: ${{ github.actor }}
-        IMAGE: docker.pkg.github.com/heritagemap/frontend-pwa/image
+        IMAGE: docker.pkg.github.com/heritagemap/frontend-pwa/frontend-pwa
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -93,6 +93,3 @@ jobs:
           docker pull $IMAGE:latest
           docker stop frontend-pwa || true && docker rm frontend-pwa || true
           docker run --detach --name frontend-pwa $IMAGE:latest
-
-          docker stop caddy || true && docker rm caddy || true
-          docker run --detach --publish 80:80 --publish 443:443 -v $PWD/Caddyfile:/etc/caddy/Caddyfile -v caddy_data:/data -v caddy_config:/config --name caddy caddy
