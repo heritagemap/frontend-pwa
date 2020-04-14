@@ -80,17 +80,20 @@ jobs:
       uses: appleboy/ssh-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_ACTOR: $GITHUB_ACTOR
+        IMAGE: docker.pkg.github.com/heritagemap/frontend-pwa/image
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
         script_stop: true
+        envs: GITHUB_TOKEN,GITHUB_ACTOR,IMAGE
         script: |
           whoami
           ls -al
           echo "I am $GITHUB_TOKEN"
           echo "I am $IMAGE_ID"
-          docker login -u ${GITHUB_ACTOR} -p $GITHUB_TOKEN docker.pkg.github.com
-          docker pull docker.pkg.github.com/heritagemap/frontend-pwa/image:latest
-          docker run -p 80:9000 -t docker.pkg.github.com/heritagemap/frontend-pwa/image:latest
+          docker login -u $GITHUB_ACTOR -p $GITHUB_TOKEN docker.pkg.github.com
+          docker pull $IMAGE:latest
+          docker run -p 80:9000 -t $IMAGE:latest
