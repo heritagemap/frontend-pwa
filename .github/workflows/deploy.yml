@@ -13,9 +13,6 @@ on:
   # Run tests for any PRs.
   pull_request:
 
-env:
-  IMAGE_NAME: image
-
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -50,14 +47,14 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build image
-      run: docker build . --file Dockerfile --tag image
+      run: docker build --tag image .
 
     - name: Log into registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
 
     - name: Push image
       run: |
-        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+        IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/image
 
         # Change all uppercase to lowercase
         IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -87,7 +84,7 @@ jobs:
       uses: appleboy/ssh-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_ACTOR: $GITHUB_ACTOR
+        GITHUB_ACTOR: ${{ github.actor }}
         IMAGE: docker.pkg.github.com/heritagemap/frontend-pwa/image
       with:
         host: ${{ secrets.HOST }}
@@ -97,6 +94,6 @@ jobs:
         script_stop: true
         envs: GITHUB_TOKEN,GITHUB_ACTOR,IMAGE
         script: |
-          docker login -u $GITHUB_ACTOR -p $GITHUB_TOKEN docker.pkg.github.com
+          echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
           docker pull $IMAGE:latest
           docker run -d -p 80:9000 --name frontend-pwa $IMAGE:latest
