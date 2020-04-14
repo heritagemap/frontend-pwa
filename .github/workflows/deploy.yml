@@ -14,8 +14,7 @@ on:
   pull_request:
 
 env:
-  # TODO: Change variable to your image's name.
-  IMAGE_NAME: frontend-pwa
+  IMAGE_NAME: image
 
 jobs:
   test:
@@ -79,11 +78,16 @@ jobs:
     steps:
     - name: Deploy
       uses: appleboy/ssh-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         port: ${{ secrets.PORT }}
+        script_stop: true
         script: |
           whoami
           ls -al
+          echo "I am $GITHUB_TOKEN"
+          echo "I am $IMAGE_ID"
