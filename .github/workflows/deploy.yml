@@ -74,6 +74,8 @@ jobs:
   deploy:
     needs: build
 
+    runs-on: ubuntu-latest
+
     steps:
     - name: Deploy
       uses: appleboy/ssh-action@master
