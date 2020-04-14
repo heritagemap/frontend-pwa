@@ -92,5 +92,5 @@ jobs:
         script: |
           docker login -u $GITHUB_ACTOR -p $GITHUB_TOKEN docker.pkg.github.com
           docker pull $IMAGE:latest
-          docker stop --name frontend-pwa
+          docker stop frontend-pwa
           docker run -d -p 80:9000 --name frontend-pwa $IMAGE:latest
