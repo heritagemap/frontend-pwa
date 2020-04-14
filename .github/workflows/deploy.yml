@@ -90,10 +90,6 @@ jobs:
         script_stop: true
         envs: GITHUB_TOKEN,GITHUB_ACTOR,IMAGE
         script: |
-          whoami
-          ls -al
-          echo "I am $GITHUB_TOKEN"
-          echo "I am $IMAGE_ID"
           docker login -u $GITHUB_ACTOR -p $GITHUB_TOKEN docker.pkg.github.com
           docker pull $IMAGE:latest
-          docker run -p 80:9000 -t $IMAGE:latest
+          docker run -d -p 80:9000 $IMAGE:latest
