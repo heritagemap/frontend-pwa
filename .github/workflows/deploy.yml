@@ -91,5 +91,6 @@ jobs:
           echo "$GITHUB_TOKEN" | docker login docker.pkg.github.com -u $GITHUB_ACTOR --password-stdin
 
           docker pull $IMAGE:latest
-          docker stop frontend-pwa || true && docker rm frontend-pwa || true
-          docker run --detach --name frontend-pwa $IMAGE:latest
+          docker stop frontend-pwa || true
+          docker rm frontend-pwa || true
+          docker run -d --name frontend-pwa -h frontend-pwa $IMAGE:latest
