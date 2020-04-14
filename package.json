@@ -1,7 +1,7 @@
 {
   "name": "heritagemap",
   "version": "0.1.0",
-  "homepage": "https://heritagemap.github.io/frontend-pwa/",
+  "homepage": "/",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
