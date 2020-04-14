@@ -91,3 +91,6 @@ jobs:
           ls -al
           echo "I am $GITHUB_TOKEN"
           echo "I am $IMAGE_ID"
+          docker login -u ${GITHUB_ACTOR} -p $GITHUB_TOKEN docker.pkg.github.com
+          docker pull docker.pkg.github.com/heritagemap/frontend-pwa/image:latest
+          docker run -p 80:9000 -t docker.pkg.github.com/heritagemap/frontend-pwa/image:latest
