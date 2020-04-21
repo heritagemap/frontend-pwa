@@ -1,8 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { stringify } from 'qs';
 import styles from './Sidebar.module.scss';
 
 function Sidebar() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [titles, setTitles] = useState([]);
+
+  useEffect(() => {
+    const loadPages = async () => {
+      const PREFIX = 'Культурное наследие России/Нижегородская область';
+
+      const PAGES_RESOURCE = '/_api/ru_monuments?' + stringify({
+        query: 'list-pages',
+        prefix: PREFIX,
+      });
+
+      try {
+        const response = await fetch(PAGES_RESOURCE);
+        const json = await response.json();
+
+        const titles = json.data && json.data
+          .map((page: any) => page.title.replace(PREFIX, ''))
+          .filter(Boolean);
+
+        setTitles(titles);
+      } catch(err) {
+        console.error(err);
+      }
+    }
+
+    loadPages();
+  });
 
   return (
     <nav className={styles.sidebar}>
@@ -24,6 +52,12 @@ function Sidebar() {
                 <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="black"/>
               </svg>
             </button>
+
+            <div style={{ overflow: 'auto', height: 'calc(100vh - 100px)' }}>
+              {titles.map((title: string) => (
+                <div key={title}>{title}</div>
+              ))}
+            </div>
           </>
         )}
       </form>
