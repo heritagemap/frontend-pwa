@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import mapboxgl, { Map } from 'mapbox-gl';
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
 import styles from './MyMap.module.scss';
 
@@ -15,6 +16,13 @@ function MyMap() {
       center: [44, 56.32], // NN
       zoom: 15
     });
+
+    myMap.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+      })
+    );
 
     myMap.addControl(
       new mapboxgl.GeolocateControl({
