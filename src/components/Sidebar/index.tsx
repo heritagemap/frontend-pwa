@@ -29,8 +29,10 @@ function Sidebar() {
       }
     }
 
-    loadPages();
-  });
+    if (isSearchOpen && titles.length === 0) {
+      loadPages();
+    }
+  }, [isSearchOpen, titles]);
 
   return (
     <nav className={styles.sidebar}>
