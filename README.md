@@ -25,3 +25,9 @@ npm start
 Список страниц: https://tools.wmflabs.org/ru_monuments/monmap/api.php?query=list-pages&prefix=%D0%9A%D1%83%D0%BB%D1%8C%D1%82%D1%83%D1%80%D0%BD%D0%BE%D0%B5_%D0%BD%D0%B0%D1%81%D0%BB%D0%B5%D0%B4%D0%B8%D0%B5_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8
 
 Информция с каждой отдельной страницы: https://tools.wmflabs.org/ru_monuments/monmap/api.php?query=get-page-data&page=%D0%9A%D1%83%D0%BB%D1%8C%D1%82%D1%83%D1%80%D0%BD%D0%BE%D0%B5_%D0%BD%D0%B0%D1%81%D0%BB%D0%B5%D0%B4%D0%B8%D0%B5_%D0%A0%D0%BE%D1%81%D1%81%D0%B8%D0%B8/%D0%90%D0%BB%D1%82%D0%B0%D0%B9%D1%81%D0%BA%D0%B8%D0%B9_%D0%BA%D1%80%D0%B0%D0%B9/%D0%91%D0%B0%D1%80%D0%BD%D0%B0%D1%83%D0%BB&items=monuments&fields=name,knid,address
+
+Общемировая база памятников Викигида: https://commons.wikimedia.org/wiki/Commons:Monuments_database
+
+Там API описано, и есть запрос по координатам в том числе: https://tools.wmflabs.org/heritage/api/api.php
+
+Пример: https://tools.wmflabs.org/heritage/api/api.php?action=search&bbox=43.579856,56.062405,43.584620,56.064358
