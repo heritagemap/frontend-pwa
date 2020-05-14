@@ -11,10 +11,11 @@ const ACCESS_TOKEN ='pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29v
 class MyMap extends Component {
   state = {
     viewport: {
-      latitude: 37.7577,
-      longitude: -122.4376,
-      zoom: 8
-    }
+      latitude: 56.80714671197797,
+      longitude: 43.20772047711302,
+      zoom: 14,
+    },
+    searchValue: '',
   };
 
   mapRef: RefObject<InteractiveMap> = React.createRef();
@@ -28,17 +29,25 @@ class MyMap extends Component {
         width="100vw"
         height="100vh"
         mapboxApiAccessToken={ACCESS_TOKEN}
-        onViewportChange={(viewport: any) => this.setState({viewport})}
+        onViewportChange={(viewport: any) => { this.setState({viewport}); console.log(viewport) }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
       >
-        <Geocoder mapRef={this.mapRef} mapboxApiAccessToken={ACCESS_TOKEN} />
+        <Geocoder
+          mapRef={this.mapRef}
+          mapboxApiAccessToken={ACCESS_TOKEN}
+          inputValue={this.state.searchValue}
+          placeholder="Поиск"
+          countries="ru"
+          language="ru"
+          onViewportChange={(viewport: any) => { this.setState({viewport}); console.log(viewport) }}
+        />
         <div className={styles.controls}>
           <GeolocateControl
             style={{ marginBottom: '10px' }}
             positionOptions={{ enableHighAccuracy: true }}
             trackUserLocation={true}
           />
-          <NavigationControl/>
+          <NavigationControl showCompass={false} />
         </div>
       </MapGL>
     );
