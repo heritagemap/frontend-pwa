@@ -16,7 +16,7 @@
     "@types/react-map-gl": "5.2.3",
     "gh-pages": "2.2.0",
     "http-proxy-middleware": "1.0.3",
-    "mapbox-gl": "1.10.0",
+    "mapbox-gl": "1.10.1",
     "node-sass": "4.14.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
