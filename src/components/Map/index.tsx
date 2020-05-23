@@ -4,6 +4,8 @@ import MapGL, { GeolocateControl, NavigationControl, InteractiveMap, Marker } fr
 // @ts-ignore
 import Geocoder from 'react-map-gl-geocoder';
 
+import getBbox from '../../utils/getBbox';
+
 import styles from './MyMap.module.scss';
 
 import MarkerButton from 'components/MarkerButton';
@@ -24,13 +26,54 @@ class MyMap extends Component {
     monuments: [],
   };
 
+  abortController: { abort: () => void, signal: any } | undefined = undefined;
+
   mapRef: RefObject<InteractiveMap> = React.createRef();
+
+  componentWillUnmount() {
+    if (this.abortController) this.abortController.abort();
+  }
+
+  loadPoints = async (viewport: any) => {
+    this.setState({ viewport });
+
+    const { longitude, latitude, width, height } = viewport;
+    const bbox = getBbox({ longitude, latitude, width, height, zoom: 10 });
+
+    console.log('bbox', bbox);
+    this.setState({ viewport, zoom: 10 });
+
+    if (this.abortController) this.abortController.abort();
+    if (typeof window.AbortController === 'function') {
+      this.abortController = new window.AbortController();
+    }
+
+    try {
+      const response = await fetch(
+        PAGES_RESOURCE + bbox.map(item => String(item).substr(0, 7)).join(),
+        {
+          signal: this.abortController ? this.abortController.signal : undefined,
+        }
+      );
+
+      const { monuments } = await response.json();
+
+      console.log(monuments);
+
+      this.setState({ monuments: monuments || [] });
+
+    } catch(err) {
+
+    }
+  }
 
   handleViewportChange = (viewport: any) => {
     this.setState({ viewport });
   }
 
   handleResult = async (result: { result: { bbox: [number] }}) => {
+
+    console.log(result.result.bbox)
     try {
       const response = await fetch(PAGES_RESOURCE + result.result.bbox.map(item => String(item).substr(0, 7)).join());
       const { monuments } = await response.json();
@@ -46,14 +89,13 @@ class MyMap extends Component {
 
   render() {
     return (
-      // @ts-ignore
       <MapGL
         ref={this.mapRef}
         {...this.state.viewport}
         width="100vw"
         height="100vh"
         mapboxApiAccessToken={ACCESS_TOKEN}
-        onViewportChange={this.handleViewportChange}
+        onViewportChange={this.loadPoints}
         mapStyle="mapbox://styles/mapbox/streets-v9"
       >
         <Geocoder
@@ -71,6 +113,7 @@ class MyMap extends Component {
           className={styles.geolocateControl}
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation={true}
+          onViewportChange={this.loadPoints}
         />
 
         <NavigationControl
