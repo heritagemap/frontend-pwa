@@ -1,4 +1,5 @@
 import React, { Component, RefObject } from 'react';
+import { debounce } from 'lodash';
 // @ts-ignore
 import MapGL, { GeolocateControl, NavigationControl, InteractiveMap, Marker } from 'react-map-gl';
 // @ts-ignore
@@ -30,19 +31,32 @@ class MyMap extends Component {
 
   mapRef: RefObject<InteractiveMap> = React.createRef();
 
+  loadPointsWithDebounce = debounce((bbox) => {
+    this.loadPoints(bbox);
+  }, 1000);
+
   componentWillUnmount() {
     if (this.abortController) this.abortController.abort();
   }
 
-  loadPoints = async (viewport: any) => {
+  handleGeolocateViewportChange = (viewport: any) => {
+    const { longitude, latitude, width, height, zoom } = viewport;
+    const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(12, zoom) });
+
+    this.setState({ viewport, zoom: Math.max(12, zoom) });
+
+    this.loadPointsWithDebounce(bbox);
+  }
+
+  handleViewportChange = (viewport: any) => {
     this.setState({ viewport });
+  }
 
-    const { longitude, latitude, width, height } = viewport;
-    const bbox = getBbox({ longitude, latitude, width, height, zoom: 10 });
+  handleResult = async (result: { result: { bbox: [number] }}) => {
+    this.loadPointsWithDebounce(result.result.bbox);
+  }
 
-    console.log('bbox', bbox);
-    this.setState({ viewport, zoom: 10 });
-
+  loadPoints = async (bbox: Number[]) => {
     if (this.abortController) this.abortController.abort();
     if (typeof window.AbortController === 'function') {
       this.abortController = new window.AbortController();
@@ -57,28 +71,6 @@ class MyMap extends Component {
       );
 
       const { monuments } = await response.json();
-
-      console.log(monuments);
-
-      this.setState({ monuments: monuments || [] });
-
-    } catch(err) {
-
-    }
-  }
-
-  handleViewportChange = (viewport: any) => {
-    this.setState({ viewport });
-  }
-
-  handleResult = async (result: { result: { bbox: [number] }}) => {
-
-    console.log(result.result.bbox)
-    try {
-      const response = await fetch(PAGES_RESOURCE + result.result.bbox.map(item => String(item).substr(0, 7)).join());
-      const { monuments } = await response.json();
-
-       console.log(monuments);
 
       this.setState({ monuments: monuments || [] });
 
@@ -95,7 +87,7 @@ class MyMap extends Component {
         width="100vw"
         height="100vh"
         mapboxApiAccessToken={ACCESS_TOKEN}
-        onViewportChange={this.loadPoints}
+        onViewportChange={this.handleGeolocateViewportChange}
         mapStyle="mapbox://styles/mapbox/streets-v9"
       >
         <Geocoder
@@ -113,7 +105,7 @@ class MyMap extends Component {
           className={styles.geolocateControl}
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation={true}
-          onViewportChange={this.loadPoints}
+          onViewportChange={this.handleGeolocateViewportChange}
         />
 
         <NavigationControl
