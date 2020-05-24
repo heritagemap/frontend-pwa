@@ -24,6 +24,8 @@ const MarkerButton: FC<MarkerButtonProps> = (props) => {
 
       {showInfo &&
         <div className={styles.info}>
+          <button onClick={() => toogleShowInfo(false)}>Х</button>
+
           <h4 className={styles.title}>{props.item.name}</h4>
 
           {props.item.address && (
