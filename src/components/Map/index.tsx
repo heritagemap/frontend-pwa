@@ -1,5 +1,6 @@
 import React, { Component, RefObject } from 'react';
 import { debounce } from 'lodash';
+import { withAlert, AlertManager } from 'react-alert';
 // @ts-ignore
 import MapGL, { GeolocateControl, NavigationControl, InteractiveMap, Marker } from 'react-map-gl';
 // @ts-ignore
@@ -14,7 +15,7 @@ import MarkerButton from 'components/MarkerButton';
 const ACCESS_TOKEN ='pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
 const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&bbox=';
 
-class MyMap extends Component {
+class MyMap extends Component<{ alert: AlertManager }> {
   state = {
     viewport: {
       latitude: 56.6403,
@@ -77,6 +78,11 @@ class MyMap extends Component {
 
       this.setState({ monuments: monuments || [] });
 
+      if (!monuments || monuments.length === 0) {
+        this.props.alert.show('Достопримечательности не найдены');
+      }
+    } catch(err) {
+      this.props.alert.error('Что-то пошло не так');
     } finally {
       this.setState({ loading: false });
     }
@@ -134,4 +140,4 @@ class MyMap extends Component {
   }
 }
 
-export default MyMap;
+export default withAlert()(MyMap);
