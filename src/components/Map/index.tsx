@@ -115,6 +115,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation={true}
           onViewportChange={this.handleGeolocateViewportChange}
+          label="Мое местоположение"
         />
 
         <NavigationControl
