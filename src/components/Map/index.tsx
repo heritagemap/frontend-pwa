@@ -25,6 +25,7 @@ class MyMap extends Component {
     },
     searchValue: '',
     monuments: [],
+    loading: false,
   };
 
   abortController: { abort: () => void, signal: any } | undefined = undefined;
@@ -62,6 +63,8 @@ class MyMap extends Component {
       this.abortController = new window.AbortController();
     }
 
+    this.setState({ loading: true });
+
     try {
       const response = await fetch(
         PAGES_RESOURCE + bbox.map(item => String(item).substr(0, 7)).join(),
@@ -74,8 +77,8 @@ class MyMap extends Component {
 
       this.setState({ monuments: monuments || [] });
 
-    } catch(err) {
-
+    } finally {
+      this.setState({ loading: false });
     }
   }
 
@@ -122,6 +125,10 @@ class MyMap extends Component {
             <MarkerButton item={item} />
           </Marker>
         ))}
+
+        {this.state.loading && (
+          <div className={styles.loading}>Загрузка...</div>
+        )}
       </MapGL>
     );
   }
