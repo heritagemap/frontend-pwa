@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "4.5.1",
-    "@testing-library/jest-dom": "5.7.0",
+    "@testing-library/jest-dom": "5.8.0",
     "@testing-library/react": "10.0.4",
     "@testing-library/user-event": "10.3.5",
     "@types/jest": "25.2.2",
