@@ -18,7 +18,7 @@ npm start
 
 ## Деплой
 
-Проект автоматически выкатывается при пуше в master на https://heritagemap.github.io/frontend-pwa/
+Проект автоматически выкатывается при пуше в master на http://heritagemap.ru/
 
 ## API
 
