@@ -6,7 +6,8 @@ import MapGL, { GeolocateControl, NavigationControl, InteractiveMap, Marker } fr
 // @ts-ignore
 import Geocoder from 'react-map-gl-geocoder';
 
-import getBbox from '../../utils/getBbox';
+import MonumentInterface from 'interfaces/Monument';
+import getBbox from 'utils/getBbox';
 
 import styles from './MyMap.module.scss';
 
@@ -123,7 +124,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
           className={styles.navigationControl}
         />
 
-        {this.state.monuments.map((item: { id: string, lon: number, lat: number, name: string, address: string }) => (
+        {this.state.monuments.map((item: MonumentInterface) => (
           <Marker
             key={item.id}
             longitude={item.lon}
