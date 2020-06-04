@@ -9,7 +9,7 @@
   padding: 13px 16px;
   background-color: #fff;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
-  animation: transform 015s ease-out;
+  box-sizing: border-box;
 }
 
 .header {
@@ -38,6 +38,10 @@
 
   & + .info {
     margin-top: 15px;
+  }
+
+  svg {
+    flex: 0 0 auto;
   }
 }
 
