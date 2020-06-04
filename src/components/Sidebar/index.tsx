@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import classNames from 'classnames';
 import { SidebarContext } from 'contexts/sidebarContext';
 
 import styles from './Sidebar.module.scss';
