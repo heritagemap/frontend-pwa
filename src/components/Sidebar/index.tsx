@@ -38,7 +38,7 @@ const Sidebar = () => {
       {address && (
         <div className={styles.info}>
           <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M3 6.95C3 3.6605 5.68286 1 9 1C12.3171 1 15 3.6605 15 6.95C15 11.4125 9 18 9 18C9 18 3 11.4125 3 6.95ZM9 9C10.1046 9 11 8.10457 11 7C11 5.89543 10.1046 5 9 5C7.89543 5 7 5.89543 7 7C7 8.10457 7.89543 9 9 9Z" fill="#000" opacity="0.38"/>
+            <path fillRule="evenodd" clipRule="evenodd" d="M3 6.95C3 3.6605 5.68286 1 9 1C12.3171 1 15 3.6605 15 6.95C15 11.4125 9 18 9 18C9 18 3 11.4125 3 6.95ZM9 9C10.1046 9 11 8.10457 11 7C11 5.89543 10.1046 5 9 5C7.89543 5 7 5.89543 7 7C7 8.10457 7.89543 9 9 9Z" fill="#000" opacity="0.38"/>
           </svg>
 
           <div className={styles.text}>{address}</div>

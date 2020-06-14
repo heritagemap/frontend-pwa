@@ -7,6 +7,7 @@ import MapGL, { GeolocateControl, NavigationControl, InteractiveMap, Marker } fr
 import Geocoder from 'react-map-gl-geocoder';
 
 import MonumentInterface from 'interfaces/Monument';
+import { ViewportInterface } from 'interfaces/Map';
 import getBbox from 'utils/getBbox';
 
 import styles from './MyMap.module.scss';
@@ -23,7 +24,9 @@ class MyMap extends Component<{ alert: AlertManager }> {
       longitude: 43.3865,
       zoom: 10,
       bearing: 0,
-      pitch: 0
+      pitch: 0,
+      width: undefined,
+      height: undefined,
     },
     searchValue: '',
     monuments: [],
@@ -57,6 +60,26 @@ class MyMap extends Component<{ alert: AlertManager }> {
 
   handleResult = async (result: { result: { bbox: [number] }}) => {
     this.loadPointsWithDebounce(result.result.bbox);
+  }
+
+  handleMapLoad = () => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      // @ts-ignore
+      if (!position.coords || !position.coords.latitude || !position.coords.longitude) {
+        this.props.alert.show('Данные по геопозиции недоступны');
+        return;
+      }
+
+      const { longitude, latitude } = position.coords;
+      const { width, height, zoom } = this.state.viewport;
+
+      this.setState((prevState: { viewport: ViewportInterface }) => ({
+        viewport: { ...prevState.viewport, longitude, latitude, zoom: Math.max(12, zoom) }
+      }))
+
+      const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(12, zoom) });
+      this.loadPointsWithDebounce(bbox);
+    });
   }
 
   loadPoints = async (bbox: Number[]) => {
@@ -99,6 +122,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
         mapboxApiAccessToken={ACCESS_TOKEN}
         onViewportChange={this.handleGeolocateViewportChange}
         mapStyle="mapbox://styles/mapbox/streets-v9"
+        onLoad={this.handleMapLoad}
       >
         <Geocoder
           mapRef={this.mapRef}
