@@ -46,7 +46,7 @@
     "@testing-library/jest-dom": "5.10.1",
     "@testing-library/react": "10.2.1",
     "@testing-library/user-event": "11.4.2",
-    "@types/jest": "25.2.3",
+    "@types/jest": "26.0.0",
     "@types/lodash": "4.14.155",
     "@types/mapbox-gl": "1.10.4",
     "@types/node": "12.12.47",
