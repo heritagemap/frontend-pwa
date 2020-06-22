@@ -2,7 +2,17 @@ import React, { Component, RefObject } from 'react';
 import { debounce } from 'lodash';
 import { withAlert, AlertManager } from 'react-alert';
 // @ts-ignore
-import MapGL, { GeolocateControl, NavigationControl, InteractiveMap, Marker } from 'react-map-gl';
+import
+  {
+    GeolocateControl,
+    NavigationControl,
+    InteractiveMap,
+  }
+from 'react-map-gl';
+
+import MapGL, { Marker } from '@urbica/react-map-gl';
+import Cluster from '@urbica/react-map-gl-cluster';
+
 // @ts-ignore
 import Geocoder from 'react-map-gl-geocoder';
 
@@ -10,9 +20,9 @@ import MonumentInterface from 'interfaces/Monument';
 import { ViewportInterface } from 'interfaces/Map';
 import getBbox from 'utils/getBbox';
 
-import styles from './MyMap.module.scss';
-
 import MarkerButton from 'components/MarkerButton';
+
+import styles from './MyMap.module.scss';
 
 const ACCESS_TOKEN ='pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
 const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&bbox=';
@@ -36,6 +46,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
   abortController: { abort: () => void, signal: any } | undefined = undefined;
 
   mapRef: RefObject<InteractiveMap> = React.createRef();
+  sourceRef: RefObject<InteractiveMap> = React.createRef();
 
   loadPointsWithDebounce = debounce((bbox) => {
     this.loadPoints(bbox);
@@ -46,7 +57,9 @@ class MyMap extends Component<{ alert: AlertManager }> {
   }
 
   handleGeolocateViewportChange = (viewport: any) => {
-    const { longitude, latitude, width, height, zoom } = viewport;
+    const width = document.body.offsetWidth;
+    const height = document.body.offsetHeight;
+    const { longitude, latitude, zoom } = viewport;
     const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(12, zoom) });
 
     this.setState({ viewport, zoom: Math.max(12, zoom) });
@@ -82,6 +95,27 @@ class MyMap extends Component<{ alert: AlertManager }> {
     });
   }
 
+  // @ts-ignore
+  handleMapClick = (event) => {
+    const feature = event.features[0];
+    const clusterId = feature.properties.cluster_id;
+
+    // @ts-ignore
+    const mapboxSource = this.sourceRef.current.getSource();
+
+    mapboxSource.getClusterExpansionZoom(clusterId, (err: string, zoom: number) => {
+      if (err) return;
+
+      this.handleViewportChange({
+        ...this.state.viewport,
+        longitude: feature.geometry.coordinates[0],
+        latitude: feature.geometry.coordinates[1],
+        zoom,
+        transitionDuration: 500
+      });
+    });
+  }
+
   loadPoints = async (bbox: Number[]) => {
     if (this.abortController) this.abortController.abort();
     if (typeof window.AbortController === 'function') {
@@ -113,16 +147,22 @@ class MyMap extends Component<{ alert: AlertManager }> {
   }
 
   render() {
+    const ClusterMarker = ({ longitude, latitude, pointCount }: { longitude: number, latitude: number, pointCount: number}) => (
+      <Marker longitude={longitude} latitude={latitude}>
+        <div className={styles.cluster}>{pointCount}</div>
+      </Marker>
+    );
+
     return (
       <MapGL
         ref={this.mapRef}
         {...this.state.viewport}
-        width="100vw"
-        height="100vh"
-        mapboxApiAccessToken={ACCESS_TOKEN}
+        style={{ width: '100vw', height: '100vh' }}
+        accessToken={ACCESS_TOKEN}
         onViewportChange={this.handleGeolocateViewportChange}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         onLoad={this.handleMapLoad}
+        onClick={this.handleMapClick}
       >
         <Geocoder
           mapRef={this.mapRef}
@@ -148,15 +188,17 @@ class MyMap extends Component<{ alert: AlertManager }> {
           className={styles.navigationControl}
         />
 
-        {this.state.monuments.map((item: MonumentInterface) => (
-          <Marker
-            key={item.id}
-            longitude={item.lon}
-            latitude={item.lat}
-          >
-            <MarkerButton item={item} />
-          </Marker>
-        ))}
+        <Cluster radius={40} extent={512} nodeSize={64} component={ClusterMarker}>
+          {this.state.monuments.map((item: MonumentInterface) => (
+            <Marker
+              key={item.id}
+              longitude={item.lon}
+              latitude={item.lat}
+            >
+              <MarkerButton item={item} />
+            </Marker>
+          ))}
+        </Cluster>
 
         {this.state.loading && (
           <div className={styles.loading}>Загрузка...</div>
