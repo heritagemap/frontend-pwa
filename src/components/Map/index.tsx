@@ -23,9 +23,25 @@ import getBbox from 'utils/getBbox';
 import MarkerButton from 'components/MarkerButton';
 
 import styles from './MyMap.module.scss';
+import ClusterMarker, { cluster as clusterInterface } from './ClusterMarker';
 
 const ACCESS_TOKEN ='pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
 const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&bbox=';
+
+interface MyMapProps {
+  viewport: {
+    latitude: number;
+    longitude: number;
+    zoom: number;
+    bearing: number;
+    pitch: number;
+    width?: number;
+    height?: number;
+  };
+  searchValue: string;
+  monuments: [];
+  loading: boolean;
+}
 
 class MyMap extends Component<{ alert: AlertManager }> {
   state = {
@@ -47,6 +63,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
 
   mapRef: RefObject<InteractiveMap> = React.createRef();
   sourceRef: RefObject<InteractiveMap> = React.createRef();
+  cluster: RefObject<InteractiveMap> = React.createRef();
 
   loadPointsWithDebounce = debounce((bbox) => {
     this.loadPoints(bbox);
@@ -95,24 +112,22 @@ class MyMap extends Component<{ alert: AlertManager }> {
     });
   }
 
-  // @ts-ignore
-  handleMapClick = (event) => {
-    const feature = event.features[0];
-    const clusterId = feature.properties.cluster_id;
+  handleClusterClick = (cluster: clusterInterface) => {
+    const { clusterId, longitude, latitude } = cluster;
 
     // @ts-ignore
-    const mapboxSource = this.sourceRef.current.getSource();
+    const supercluster = this.cluster.current.getCluster();
+    const zoom = supercluster.getClusterExpansionZoom(clusterId);
 
-    mapboxSource.getClusterExpansionZoom(clusterId, (err: string, zoom: number) => {
-      if (err) return;
-
-      this.handleViewportChange({
-        ...this.state.viewport,
-        longitude: feature.geometry.coordinates[0],
-        latitude: feature.geometry.coordinates[1],
-        zoom,
-        transitionDuration: 500
-      });
+    this.setState((prevState: MyMapProps) => {
+      return {
+        viewport: {
+          ...prevState.viewport,
+          latitude,
+          longitude,
+          zoom
+        }
+      };
     });
   }
 
@@ -147,12 +162,6 @@ class MyMap extends Component<{ alert: AlertManager }> {
   }
 
   render() {
-    const ClusterMarker = ({ longitude, latitude, pointCount }: { longitude: number, latitude: number, pointCount: number}) => (
-      <Marker longitude={longitude} latitude={latitude}>
-        <div className={styles.cluster}>{pointCount}</div>
-      </Marker>
-    );
-
     return (
       <MapGL
         ref={this.mapRef}
@@ -162,7 +171,6 @@ class MyMap extends Component<{ alert: AlertManager }> {
         onViewportChange={this.handleGeolocateViewportChange}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         onLoad={this.handleMapLoad}
-        onClick={this.handleMapClick}
       >
         <Geocoder
           mapRef={this.mapRef}
@@ -188,7 +196,15 @@ class MyMap extends Component<{ alert: AlertManager }> {
           className={styles.navigationControl}
         />
 
-        <Cluster radius={40} extent={512} nodeSize={64} component={ClusterMarker}>
+        <Cluster
+          radius={40}
+          extent={512}
+          nodeSize={64}
+          component={(cluster: clusterInterface) => (
+            <ClusterMarker onClick={this.handleClusterClick} {...cluster} />
+          )}
+          ref={this.cluster}
+        >
           {this.state.monuments.map((item: MonumentInterface) => (
             <Marker
               key={item.id}
