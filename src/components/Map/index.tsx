@@ -74,6 +74,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
   }
 
   handleGeolocateViewportChange = (viewport: any) => {
+    debugger
     const width = document.body.offsetWidth;
     const height = document.body.offsetHeight;
     const { longitude, latitude, zoom } = viewport;
@@ -100,8 +101,10 @@ class MyMap extends Component<{ alert: AlertManager }> {
         return;
       }
 
+      const width = document.body.offsetWidth;
+      const height = document.body.offsetHeight;
       const { longitude, latitude } = position.coords;
-      const { width, height, zoom } = this.state.viewport;
+      const { zoom } = this.state.viewport;
 
       this.setState((prevState: { viewport: ViewportInterface }) => ({
         viewport: { ...prevState.viewport, longitude, latitude, zoom: Math.max(12, zoom) }
