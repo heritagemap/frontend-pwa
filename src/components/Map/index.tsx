@@ -1,19 +1,15 @@
 import React, { Component, RefObject } from 'react';
 import { debounce } from 'lodash';
 import { withAlert, AlertManager } from 'react-alert';
-// @ts-ignore
-import
-  {
-    GeolocateControl,
-    NavigationControl,
-    InteractiveMap,
-  }
-from 'react-map-gl';
+import {
+  GeolocateControl,
+  NavigationControl,
+  InteractiveMap,
+} from 'react-map-gl';
 
 import MapGL, { Marker } from '@urbica/react-map-gl';
 import Cluster from '@urbica/react-map-gl-cluster';
 
-// @ts-ignore
 import Geocoder from 'react-map-gl-geocoder';
 
 import MonumentInterface from 'interfaces/Monument';
@@ -95,7 +91,6 @@ class MyMap extends Component<{ alert: AlertManager }> {
 
   handleMapLoad = () => {
     navigator.geolocation.getCurrentPosition((position) => {
-      // @ts-ignore
       if (!position.coords || !position.coords.latitude || !position.coords.longitude) {
         this.props.alert.show('Данные по геопозиции недоступны');
         return;
