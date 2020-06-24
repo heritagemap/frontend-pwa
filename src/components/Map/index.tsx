@@ -74,7 +74,6 @@ class MyMap extends Component<{ alert: AlertManager }> {
   }
 
   handleGeolocateViewportChange = (viewport: any) => {
-    debugger
     const width = document.body.offsetWidth;
     const height = document.body.offsetHeight;
     const { longitude, latitude, zoom } = viewport;
@@ -174,6 +173,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
         onViewportChange={this.handleGeolocateViewportChange}
         mapStyle="mapbox://styles/mapbox/streets-v9"
         onLoad={this.handleMapLoad}
+        touchRotate={false}
       >
         <Geocoder
           mapRef={this.mapRef}
