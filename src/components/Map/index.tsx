@@ -95,8 +95,6 @@ class MyMap extends Component<{ alert: AlertManager }> {
   handleViewportChange = (viewport: any) => {
     this.setState({ viewport });
 
-    console.log('call');
-
     window.localStorage.setItem('viewport', JSON.stringify(viewport));
   }
 
@@ -116,8 +114,6 @@ class MyMap extends Component<{ alert: AlertManager }> {
       const height = document.body.offsetHeight;
       const { longitude, latitude } = position.coords;
       const { zoom } = this.state.viewport;
-
-      console.log('call')
 
       this.setState((prevState: { viewport: ViewportInterface }) => {
         const viewport = { ...prevState.viewport, longitude, latitude, zoom: Math.max(12, zoom) };
