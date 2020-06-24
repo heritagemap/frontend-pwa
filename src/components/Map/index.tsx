@@ -69,6 +69,14 @@ class MyMap extends Component<{ alert: AlertManager }> {
     this.loadPoints(bbox);
   }, 1000);
 
+  componentDidMount() {
+    const viewport = window.localStorage.getItem('viewport');
+
+    if (viewport) {
+      this.setState({ viewport: JSON.parse(viewport) });
+    }
+  }
+
   componentWillUnmount() {
     if (this.abortController) this.abortController.abort();
   }
@@ -86,6 +94,10 @@ class MyMap extends Component<{ alert: AlertManager }> {
 
   handleViewportChange = (viewport: any) => {
     this.setState({ viewport });
+
+    console.log('call');
+
+    window.localStorage.setItem('viewport', JSON.stringify(viewport));
   }
 
   handleResult = async (result: { result: { bbox: [number] }}) => {
@@ -105,9 +117,14 @@ class MyMap extends Component<{ alert: AlertManager }> {
       const { longitude, latitude } = position.coords;
       const { zoom } = this.state.viewport;
 
-      this.setState((prevState: { viewport: ViewportInterface }) => ({
-        viewport: { ...prevState.viewport, longitude, latitude, zoom: Math.max(12, zoom) }
-      }))
+      console.log('call')
+
+      this.setState((prevState: { viewport: ViewportInterface }) => {
+        const viewport = { ...prevState.viewport, longitude, latitude, zoom: Math.max(12, zoom) };
+        window.localStorage.setItem('viewport', JSON.stringify(viewport));
+
+        return ({ viewport });
+      })
 
       const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(12, zoom) });
       this.loadPointsWithDebounce(bbox);
