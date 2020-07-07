@@ -13,7 +13,7 @@ app.use('/_api/ru_monuments', createProxyMiddleware({
 
 // https://tools.wmflabs.org/heritage/api/api.php
 app.use('/_api/heritage', createProxyMiddleware({
-  target: 'https://tools.wmflabs.org/heritage/api/api.php',
+  target: 'https://heritage.toolforge.org/api/api.php',
   changeOrigin: true,
 }));
 

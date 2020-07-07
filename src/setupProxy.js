@@ -12,7 +12,7 @@ module.exports = function(app) {
   app.use(
     '/_api/heritage',
     createProxyMiddleware({
-      target: 'https://tools.wmflabs.org/heritage/api/api.php',
+      target: 'https://heritage.toolforge.org/api/api.php',
       changeOrigin: true,
     })
   );
