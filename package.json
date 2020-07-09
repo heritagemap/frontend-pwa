@@ -8,7 +8,7 @@
     "@urbica/react-map-gl": "1.13.1",
     "@urbica/react-map-gl-cluster": "0.2.0",
     "classnames": "2.2.6",
-    "http-proxy-middleware": "1.0.4",
+    "http-proxy-middleware": "1.0.5",
     "lodash": "4.17.15",
     "mapbox-gl": "1.11.0",
     "node-sass": "4.14.1",
