@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "4.5.1",
-    "@urbica/react-map-gl": "1.13.1",
+    "@urbica/react-map-gl": "1.13.2",
     "@urbica/react-map-gl-cluster": "0.2.0",
     "classnames": "2.2.6",
     "http-proxy-middleware": "1.0.4",
