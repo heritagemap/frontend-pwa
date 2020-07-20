@@ -20,7 +20,7 @@
     "react-map-gl-geocoder": "2.0.11",
     "react-scripts": "3.4.1",
     "supercluster": "7.1.0",
-    "typescript": "3.9.6",
+    "typescript": "3.9.7",
     "unfetch": "4.1.0"
   },
   "scripts": {
