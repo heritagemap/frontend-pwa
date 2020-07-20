@@ -9,7 +9,7 @@
     "@urbica/react-map-gl-cluster": "0.2.0",
     "classnames": "2.2.6",
     "http-proxy-middleware": "1.0.5",
-    "lodash": "4.17.15",
+    "lodash": "4.17.19",
     "mapbox-gl": "1.11.1",
     "node-sass": "4.14.1",
     "react": "16.13.1",
