@@ -51,7 +51,7 @@
     "@testing-library/user-event": "12.1.5",
     "@types/jest": "26.0.10",
     "@types/lodash": "4.14.161",
-    "@types/mapbox-gl": "1.11.2",
+    "@types/mapbox-gl": "1.12.0",
     "@types/node": "12.12.59",
     "@types/react": "16.9.49",
     "@types/react-alert": "5.2.0",
