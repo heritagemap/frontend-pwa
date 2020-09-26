@@ -1,14 +1,10 @@
-import React, { Component, RefObject } from 'react';
+import React, { Component } from 'react';
 import { debounce } from 'lodash';
 import { withAlert, AlertManager } from 'react-alert';
-import {
-  GeolocateControl,
-  NavigationControl,
-  InteractiveMap,
-} from 'react-map-gl';
 
-import MapGL, { Marker } from '@urbica/react-map-gl';
+import MapGL, { Marker, GeolocateControl, NavigationControl } from '@urbica/react-map-gl';
 import Cluster from '@urbica/react-map-gl-cluster';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 import Geocoder from 'react-map-gl-geocoder';
 
@@ -57,9 +53,9 @@ class MyMap extends Component<{ alert: AlertManager }> {
 
   abortController: { abort: () => void, signal: any } | undefined = undefined;
 
-  mapRef: RefObject<InteractiveMap> = React.createRef();
-  sourceRef: RefObject<InteractiveMap> = React.createRef();
-  cluster: RefObject<InteractiveMap> = React.createRef();
+  mapRef = React.createRef();
+  sourceRef = React.createRef();
+  cluster = React.createRef();
 
   loadPointsWithDebounce = debounce((bbox) => {
     this.loadPoints(bbox);
@@ -195,17 +191,13 @@ class MyMap extends Component<{ alert: AlertManager }> {
         />
 
         <GeolocateControl
-          className={styles.geolocateControl}
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation={true}
           onViewportChange={this.handleGeolocateViewportChange}
           label="Мое местоположение"
         />
 
-        <NavigationControl
-          showCompass={false}
-          className={styles.navigationControl}
-        />
+        <NavigationControl position='top-right' showZoom />
 
         <Cluster
           radius={40}

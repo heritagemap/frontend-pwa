@@ -11,8 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-
-.mapboxgl-ctrl-top-right .mapboxgl-ctrl {
-  width: calc(100% - 10px);
-  min-width: 200px;
-}
