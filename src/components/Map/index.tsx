@@ -38,8 +38,8 @@ interface MyMapProps {
 class MyMap extends Component<{ alert: AlertManager }> {
   state = {
     viewport: {
-      latitude: 56.6403,
-      longitude: 43.3865,
+      latitude: 55.7522,
+      longitude: 37.6155,
       zoom: 10,
       bearing: 0,
       pitch: 0,
@@ -95,6 +95,8 @@ class MyMap extends Component<{ alert: AlertManager }> {
   }
 
   handleMapLoad = () => {
+    if (window.localStorage.getItem('viewport')) return;
+
     navigator.geolocation.getCurrentPosition((position) => {
       if (!position.coords || !position.coords.latitude || !position.coords.longitude) {
         this.props.alert.show('Данные по геопозиции недоступны');
