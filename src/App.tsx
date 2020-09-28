@@ -6,6 +6,8 @@ import MarkerProvider from 'contexts/sidebarContext';
 
 import './App.scss';
 
+
+
 function App() {
   const [currentMonument, setCurrentMonument] = useState(undefined);
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);

@@ -1,13 +1,31 @@
 import React, { useContext } from 'react';
 import { SidebarContext } from 'contexts/sidebarContext';
 
+import FullInfo from 'components/FullInfo';
+
 import styles from './Sidebar.module.scss';
 
-const Sidebar = () => {
-  // @ts-ignore
-  const { sidebarIsOpen, monument, onClose } = useContext(SidebarContext);
+interface SidebarPropsInterface {
+  sidebarIsOpen?: boolean;
+  monument?: {
+    image?: string;
+    adm2?: string;
+    adm3?: string;
+    address?: string;
+    name?: string;
+    source?: string;
+  };
+  onClose?: () => void;
+}
 
-  if (!sidebarIsOpen) return null;
+const Sidebar = () => {
+  const {
+    sidebarIsOpen,
+    monument,
+    onClose
+  }: SidebarPropsInterface = useContext(SidebarContext);
+
+  if (!sidebarIsOpen || !monument) return null;
 
   const address = [monument.adm2, monument.adm3, monument.address].reduce((acc, item, index) => {
     if (!item) return acc;
@@ -43,6 +61,10 @@ const Sidebar = () => {
 
           <div className={styles.text}>{address}</div>
         </div>
+      )}
+
+      {monument.image && (
+        <FullInfo image={monument.image} />
       )}
     </section>
   )
