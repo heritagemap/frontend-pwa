@@ -13,6 +13,7 @@ const FullInfo = ({ image }: { image?: string }) => {
   useEffect(() => {
     const fetchInfo = async () => {
       setLoading(true);
+      setInfo({})
 
       try {
         const response = await fetch(
@@ -24,7 +25,6 @@ const FullInfo = ({ image }: { image?: string }) => {
         const info = x2js.xml2js(text).response;
 
         setInfo(info);
-        console.log(info)
       } finally {
         setLoading(false);
       }
@@ -49,7 +49,7 @@ const FullInfo = ({ image }: { image?: string }) => {
           <div dangerouslySetInnerHTML={{ __html: 'Автор: ' + info.file.author }} />
 
           {/* @ts-ignore */}
-          {info.categories.category.map(item => (
+          {info.categories && info.categories.category && info.categories.category.map(item => (
             <div className={styles.tag} key={item}>{item}</div>
           ))}
         </>

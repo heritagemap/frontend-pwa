@@ -81,11 +81,14 @@ class MyMap extends Component<{ alert: AlertManager }> {
 
     this.setState({ viewport, zoom: Math.max(12, zoom) });
 
+    window.localStorage.setItem('viewport', JSON.stringify(viewport));
+
     this.loadPointsWithDebounce(bbox);
   }
 
   handleViewportChange = (viewport: any) => {
     this.setState({ viewport });
+
 
     window.localStorage.setItem('viewport', JSON.stringify(viewport));
   }
@@ -95,7 +98,16 @@ class MyMap extends Component<{ alert: AlertManager }> {
   }
 
   handleMapLoad = () => {
-    if (window.localStorage.getItem('viewport')) return;
+    if (window.localStorage.getItem('viewport')) {
+      const width = document.body.offsetWidth;
+      const height = document.body.offsetHeight;
+
+      // @ts-ignore
+      const { longitude, latitude, zoom } = JSON.parse(window.localStorage.getItem('viewport'));
+      const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(12, zoom) });
+      this.loadPoints(bbox);
+      return;
+    };
 
     navigator.geolocation.getCurrentPosition((position) => {
       if (!position.coords || !position.coords.latitude || !position.coords.longitude) {
@@ -163,6 +175,8 @@ class MyMap extends Component<{ alert: AlertManager }> {
         this.props.alert.show('Достопримечательности не найдены');
       }
     } catch(err) {
+      if (err.name === 'AbortError') return;
+
       this.props.alert.error('Что-то пошло не так');
     } finally {
       this.setState({ loading: false });
