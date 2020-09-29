@@ -18,6 +18,8 @@ const options = {
   transition: transitions.SCALE
 }
 
+console.log('APP_LAST_COMMIT: ', process.env.REACT_APP_VERSION);
+
 ReactDOM.render(
   <React.StrictMode>
     <AlertProvider template={AlertTemplate} {...options}>
