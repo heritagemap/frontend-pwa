@@ -23,7 +23,7 @@ const FullInfo = ({ image }: { image?: string }) => {
         const text = await response.text();
         // @ts-ignore
         const info = x2js.xml2js(text).response;
-
+        console.log(info, Array.isArray(info.categories.category))
         setInfo(info);
       } finally {
         setLoading(false);
@@ -49,9 +49,20 @@ const FullInfo = ({ image }: { image?: string }) => {
           <div dangerouslySetInnerHTML={{ __html: 'Автор: ' + info.file.author }} />
 
           {/* @ts-ignore */}
-          {info.categories && info.categories.category && info.categories.category.map(item => (
+          <div dangerouslySetInnerHTML={{ __html: info.file.date }} />
+
+          {/* @ts-ignore */}
+          {info.categories && info.categories.category && Array.isArray(info.categories.category) && info.categories.category.map(item => (
             <div className={styles.tag} key={item}>{item}</div>
           ))}
+
+          {/* @ts-ignore */}
+          {info.categories && info.categories.category && !Array.isArray(info.categories.category) && (
+            <>
+              {/* @ts-ignore */}
+              <div className={styles.tag} key={info.categories.category}>{info.categories.category}</div>
+            </>
+          )}
         </>
       )}
     </div>
