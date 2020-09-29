@@ -11,6 +11,11 @@ app.use('/_api/ru_monuments', createProxyMiddleware({
   changeOrigin: true,
 }));
 
+app.use('/_api/ru_monument_image', createProxyMiddleware({
+  target: 'https://magnus-toolserver.toolforge.org/commonsapi.php',
+  changeOrigin: true,
+}));
+
 // https://tools.wmflabs.org/heritage/api/api.php
 app.use('/_api/heritage', createProxyMiddleware({
   target: 'https://heritage.toolforge.org/api/api.php',
