@@ -23,7 +23,6 @@ const FullInfo = ({ image }: { image?: string }) => {
         const text = await response.text();
         // @ts-ignore
         const info = x2js.xml2js(text).response;
-        console.log(info, Array.isArray(info.categories.category))
         setInfo(info);
       } finally {
         setLoading(false);
