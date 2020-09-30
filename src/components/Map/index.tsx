@@ -86,17 +86,6 @@ class MyMap extends Component<{ alert: AlertManager }> {
     this.loadPointsWithDebounce(bbox);
   }
 
-  handleViewportChange = (viewport: any) => {
-    this.setState({ viewport });
-
-
-    window.localStorage.setItem('viewport', JSON.stringify(viewport));
-  }
-
-  handleResult = async (result: { result: { bbox: [number] }}) => {
-    this.loadPointsWithDebounce(result.result.bbox);
-  }
-
   handleMapLoad = () => {
     if (window.localStorage.getItem('viewport')) {
       const width = document.body.offsetWidth;
@@ -178,6 +167,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
       if (err.name === 'AbortError') return;
 
       this.props.alert.error('Что-то пошло не так');
+      console.log(err);
     } finally {
       this.setState({ loading: false });
     }
@@ -205,8 +195,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
           placeholder="Поиск"
           countries="ru"
           language="ru"
-          onViewportChange={this.handleViewportChange}
-          onResult={this.handleResult}
+          onViewportChange={this.handleGeolocateViewportChange}
         />
 
         <GeolocateControl
