@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import X2JS from 'x2js';
 
+import { FileInterface } from 'interfaces/FullInfo';
+
 import styles from './FullInfo.module.scss';
 
 const IMAGE_RESOURCE = '/_api/ru_monument_image?image=';
@@ -8,22 +10,39 @@ const x2js = new X2JS();
 
 const FullInfo = ({ image }: { image?: string }) => {
   const [loading, setLoading] = useState(false);
-  const [info, setInfo] = useState({});
+  const [description, setDescription] = useState('');
+  const [file, setFile] = useState<FileInterface | undefined>(undefined);
+  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchInfo = async () => {
       setLoading(true);
-      setInfo({})
+      setDescription('');
+      setFile(undefined);
+      setCategories([]);
 
       try {
         const response = await fetch(
           IMAGE_RESOURCE + image,
         );
 
-        const text = await response.text();
-        // @ts-ignore
+        const text: string = await response.text();
         const info = x2js.xml2js(text).response;
-        setInfo(info);
+
+        if (info?.description?.language?.__text) {
+          setDescription(info.description.language.__text);
+        }
+
+        if (info?.file) {
+          setFile(info.file);
+        }
+
+        if (info?.categories?.category) {
+          const categoriesArray = Array.isArray(info.categories.category)
+            ? info.categories.category
+            : [info.categories.category]
+          setCategories(categoriesArray);
+        }
       } finally {
         setLoading(false);
       }
@@ -35,35 +54,24 @@ const FullInfo = ({ image }: { image?: string }) => {
   return (
     <div className={styles.container}>
       {loading && ('Загрузка...')}
-      {/* @ts-ignore */}
-      {info && info.file && (
+
+      {description && (
+        <div dangerouslySetInnerHTML={{ __html: description }} className={styles.description} />
+      )}
+
+      {file && file.urls && (
         <>
-          {/* @ts-ignore */}
-          <div dangerouslySetInnerHTML={{ __html: info.description.language.__text }} className={styles.description} />
+          <img src={file.urls.file} alt={file.name || 'description'} width="320" />
 
-          {/* @ts-ignore */}
-          <img src={info.file.urls.file} alt={info.file.name} width="320" />
+          <div dangerouslySetInnerHTML={{ __html: 'Автор: ' + file.author }} />
 
-          {/* @ts-ignore */}
-          <div dangerouslySetInnerHTML={{ __html: 'Автор: ' + info.file.author }} />
-
-          {/* @ts-ignore */}
-          <div dangerouslySetInnerHTML={{ __html: info.file.date }} />
-
-          {/* @ts-ignore */}
-          {info.categories && info.categories.category && Array.isArray(info.categories.category) && info.categories.category.map(item => (
-            <div className={styles.tag} key={item}>{item}</div>
-          ))}
-
-          {/* @ts-ignore */}
-          {info.categories && info.categories.category && !Array.isArray(info.categories.category) && (
-            <>
-              {/* @ts-ignore */}
-              <div className={styles.tag} key={info.categories.category}>{info.categories.category}</div>
-            </>
-          )}
+          <div dangerouslySetInnerHTML={{ __html: file.date }} />
         </>
       )}
+
+      {categories.map(item => (
+        <div className={styles.tag} key={item}>{item}</div>
+      ))}
     </div>
   )
 }

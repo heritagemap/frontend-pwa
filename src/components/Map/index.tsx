@@ -188,6 +188,9 @@ class MyMap extends Component<{ alert: AlertManager }> {
       <MapGL
         ref={this.mapRef}
         {...this.state.viewport}
+        dragRotate={false}
+        pitch={0}
+        pitchWithRotate={false}
         style={{ width: '100vw', height: '100vh' }}
         accessToken={ACCESS_TOKEN}
         onViewportChange={this.handleGeolocateViewportChange}
