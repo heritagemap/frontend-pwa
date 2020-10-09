@@ -8,6 +8,7 @@ import styles from './Sidebar.module.scss';
 interface SidebarPropsInterface {
   sidebarIsOpen?: boolean;
   monument?: {
+    id: number;
     image?: string;
     adm2?: string;
     adm3?: string;
@@ -17,6 +18,8 @@ interface SidebarPropsInterface {
   };
   onClose?: () => void;
 }
+
+const source = 'https://ru_monuments.toolforge.org/wikivoyage.php?id=';
 
 const Sidebar = () => {
   const {
@@ -50,7 +53,7 @@ const Sidebar = () => {
           <path d="M1.9 4C1.9 2.84 2.84 1.9 4 1.9H8V0H4C1.79 0 0 1.79 0 4C0 6.21 1.79 8 4 8H8V6.1H4C2.84 6.1 1.9 5.16 1.9 4ZM14 0H10V1.9H14C15.16 1.9 16.1 2.84 16.1 4C16.1 5.16 15.16 6.1 14 6.1H10V8H14C16.21 8 18 6.21 18 4C18 1.79 16.21 0 14 0ZM6 5H12V3H6V5Z" fill="#000"/>
         </svg>
 
-        <a href={`https:${monument.source}`} target="_blank" rel="noopener noreferrer" className={styles.text}><span>Доп.информация</span></a>
+        <a href={`${source}${monument.id}`} target="_blank" rel="noopener noreferrer" className={styles.text}><span>Доп.информация</span></a>
       </div>
 
       {address && (
