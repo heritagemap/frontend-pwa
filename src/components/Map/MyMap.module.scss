@@ -28,8 +28,14 @@
   width: 30px;
   height: 30px;
   color: #fff;
-  background: #007afe;
+  background: #6c2c04;
   border-radius: 20px;
   text-align: center;
   font-size: 17px;
+  cursor: pointer;
+  
+  &:hover {
+    background: #532203;
+  }
+  
 }
