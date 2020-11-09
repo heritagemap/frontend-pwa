@@ -68,10 +68,6 @@ const FullInfo = ({ image }: { image?: string }) => {
           <div dangerouslySetInnerHTML={{ __html: file.date }} />
         </>
       )}
-
-      {categories.map(item => (
-        <div className={styles.tag} key={item}>{item}</div>
-      ))}
     </div>
   )
 }
