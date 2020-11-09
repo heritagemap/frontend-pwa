@@ -56,7 +56,7 @@
     "@types/node": "12.12.62",
     "@types/react": "16.9.56",
     "@types/react-alert": "5.2.0",
-    "@types/react-dom": "16.9.8",
+    "@types/react-dom": "16.9.9",
     "@types/react-map-gl": "5.2.7"
   }
 }
