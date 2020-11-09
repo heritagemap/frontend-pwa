@@ -21,7 +21,7 @@
     "react-scripts": "3.4.3",
     "supercluster": "6.0.2",
     "typescript": "3.9.7",
-    "unfetch": "4.1.0",
+    "unfetch": "4.2.0",
     "x2js": "3.4.0"
   },
   "scripts": {
