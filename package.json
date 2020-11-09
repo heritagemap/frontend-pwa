@@ -18,7 +18,7 @@
     "react-dom": "16.13.1",
     "react-map-gl": "5.2.8",
     "react-map-gl-geocoder": "2.1.6",
-    "react-scripts": "3.4.3",
+    "react-scripts": "3.4.4",
     "supercluster": "6.0.2",
     "typescript": "3.9.7",
     "unfetch": "4.1.0",
