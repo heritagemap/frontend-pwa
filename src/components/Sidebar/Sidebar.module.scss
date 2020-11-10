@@ -33,7 +33,7 @@
 
 .info {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   opacity: 0.54;
   font-size: 14px;
 
@@ -43,6 +43,7 @@
 
   svg {
     flex: 0 0 auto;
+    margin-top: 2px;
   }
 }
 
