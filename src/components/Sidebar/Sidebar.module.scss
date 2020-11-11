@@ -36,6 +36,7 @@
   align-items: flex-start;
   opacity: 0.54;
   font-size: 14px;
+  line-height: 18px;
 
   & + .info {
     margin-top: 15px;
@@ -43,7 +44,6 @@
 
   svg {
     flex: 0 0 auto;
-    margin-top: 2px;
   }
 }
 
