@@ -70,6 +70,8 @@ const Sidebar = () => {
       {monument.image && (
         <FullInfo image={monument.image} />
       )}
+      
+      <div className={styles.license}>Информация об объектах взята из <a href="https://ru.wikivoyage.org" target="_blank">Викигида</a><br /> Данные на сайте доступны по лицензии <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.ru" target="_blank">CC-By-SA 3.0</a></div>
     </section>
   )
 }
