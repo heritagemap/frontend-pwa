@@ -30,7 +30,7 @@ const Sidebar = () => {
 
   if (!sidebarIsOpen || !monument) return null;
 
-  const address = [monument.adm2, monument.adm3, monument.address].reduce((acc, item, index) => {
+  const address = [monument.adm2, monument.adm2 != monument.adm3 ? monument.adm3 : '', monument.address].reduce((acc, item, index) => {
     if (!item) return acc;
     if (acc === '') return item;
     return acc + `, ${item}`;
