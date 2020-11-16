@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import { SidebarContext } from 'contexts/sidebarContext';
 
 import FullInfo from 'components/FullInfo';
@@ -17,6 +18,7 @@ interface SidebarPropsInterface {
     source?: string;
   };
   onClose?: () => void;
+  id?: number;
 }
 
 const source = 'https://ru_monuments.toolforge.org/wikivoyage.php?id=';

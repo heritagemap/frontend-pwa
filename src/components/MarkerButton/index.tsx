@@ -1,4 +1,5 @@
 import React, { FC, useContext } from 'react';
+import { useHistory } from "react-router-dom";
 import { SidebarContext } from 'contexts/sidebarContext';
 import SidebarContextInterface from 'interfaces/SidebarContext';
 import MonumentInterface from 'interfaces/Monument';
@@ -13,10 +14,12 @@ const MarkerButton: FC<MarkerButtonProps> = ({ item }) => {
   // @ts-ignore
   const { sidebarIsOpen, setCurrentMonument, onOpen, monument } : SidebarContextInterface | {} = useContext(SidebarContext);
   const isActive = sidebarIsOpen && monument.id === item.id;
+  let history = useHistory();
 
   const handleMarkerClick = () => {
     setCurrentMonument(item);
     onOpen();
+    history.push(`/${item.id}`);
   }
 
   return (

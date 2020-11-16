@@ -18,7 +18,7 @@ import styles from './MyMap.module.scss';
 import ClusterMarker, { cluster as clusterInterface } from './ClusterMarker';
 
 const ACCESS_TOKEN ='pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
-const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&bbox=';
+const PAGES_RESOURCE = '/_api/heritage/?action=search&srcountry=ru&format=json&bbox=';
 
 interface MyMapProps {
   viewport: {

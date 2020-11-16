@@ -1,4 +1,9 @@
 import React, { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 import Map from 'components/Map';
 import Sidebar from 'components/Sidebar';
@@ -11,20 +16,24 @@ function App() {
   const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
 
   return (
-    <main>
-      <MarkerProvider
-        value={{
-          monument: currentMonument,
-          setCurrentMonument,
-          sidebarIsOpen,
-          onOpen: () => setSidebarIsOpen(true),
-          onClose: () => setSidebarIsOpen(false),
-        }}
-      >
-        <Sidebar />
-        <Map />
-      </MarkerProvider>
-    </main>
+    <Router>
+      <main>
+        <MarkerProvider
+          value={{
+            monument: currentMonument,
+            setCurrentMonument,
+            sidebarIsOpen,
+            onOpen: () => setSidebarIsOpen(true),
+            onClose: () => setSidebarIsOpen(false),
+          }}
+        >
+          <Map />
+          <Switch>
+            <Route path="/:id" children={<Sidebar />} />
+          </Switch>
+        </MarkerProvider>
+      </main>
+    </Router>
   );
 }
 
