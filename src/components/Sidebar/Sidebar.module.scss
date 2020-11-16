@@ -11,45 +11,70 @@
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
   overflow: auto;
+  font-size: 14px;
+  line-height: 18px;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  padding-right: 40px;
 }
 
 .close {
   background-color: transparent;
   border: 0;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  opacity: .8;
+  
+  &:hover {
+    opacity: 1;
+  }  
 }
 
 .title {
   margin: 0;
-  font-size: 20px;
-  line-height: 23px;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.mainInfo {
+  display: block;
+  margin-block-start: 0;
+  margin-block-end: 10px;
+  
+  &:last-of-type {
+    margin-block-end: 16px;
+  }
 }
 
 .info {
   display: flex;
   align-items: flex-start;
-  opacity: 0.54;
   font-size: 14px;
   line-height: 18px;
 
   & + .info {
-    margin-top: 15px;
+    margin-top: 10px;
   }
 
   svg {
     flex: 0 0 auto;
+    opacity: 0.4;
   }
 }
 
 .text {
-  margin-left: 10px;
+  margin-left: 14px;
   color: inherit;
+  opacity: 0.6;
 }
 
 .license {
