@@ -33,9 +33,10 @@
 
 .info {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   opacity: 0.54;
   font-size: 14px;
+  line-height: 18px;
 
   & + .info {
     margin-top: 15px;
@@ -49,4 +50,16 @@
 .text {
   margin-left: 10px;
   color: inherit;
+}
+
+.license {
+  margin-top: 40px;
+  color: #aaa;
+  font-size: 12px;
+  
+  a:link,
+  a:visited  {
+    color: #aaa;
+  }
+  
 }

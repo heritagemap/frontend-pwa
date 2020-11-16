@@ -10,14 +10,14 @@ const x2js = new X2JS();
 
 const FullInfo = ({ image }: { image?: string }) => {
   const [loading, setLoading] = useState(false);
-  const [description, setDescription] = useState('');
+  const [licenses, setLicenses] = useState('');
   const [file, setFile] = useState<FileInterface | undefined>(undefined);
   const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchInfo = async () => {
       setLoading(true);
-      setDescription('');
+      setLicenses('');
       setFile(undefined);
       setCategories([]);
 
@@ -28,9 +28,9 @@ const FullInfo = ({ image }: { image?: string }) => {
 
         const text: string = await response.text();
         const info = x2js.xml2js(text).response;
-
-        if (info?.description?.language?.__text) {
-          setDescription(info.description.language.__text);
+        
+        if (info?.licenses?.license?.name) {
+          setLicenses(info.licenses.license.name);
         }
 
         if (info?.file) {
@@ -55,23 +55,23 @@ const FullInfo = ({ image }: { image?: string }) => {
     <div className={styles.container}>
       {loading && ('Загрузка...')}
 
-      {description && (
-        <div dangerouslySetInnerHTML={{ __html: description }} className={styles.description} />
-      )}
-
       {file && file.urls && (
         <>
           <img src={file.urls.file} alt={file.name || 'description'} width="320" />
+          
+          <div className={styles.attributes}>
 
-          <div dangerouslySetInnerHTML={{ __html: 'Автор: ' + file.author }} />
+            {licenses && (
+              <span dangerouslySetInnerHTML={{ __html: licenses }} className={styles.licenses} />
+            )}
 
-          <div dangerouslySetInnerHTML={{ __html: file.date }} />
+            <span dangerouslySetInnerHTML={{ __html: file.author + ',' }} className={styles.author} />
+
+            <span dangerouslySetInnerHTML={{ __html: file.date }} />
+            
+          </div>
         </>
       )}
-
-      {categories.map(item => (
-        <div className={styles.tag} key={item}>{item}</div>
-      ))}
     </div>
   )
 }
