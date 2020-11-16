@@ -22,6 +22,11 @@ app.use('/_api/heritage', createProxyMiddleware({
   changeOrigin: true,
 }));
 
+app.use('/_api/heritage_info', createProxyMiddleware({
+  target: 'https://ru_monuments.toolforge.org/wikivoyage1.php',
+  changeOrigin: true,
+}));
+
 app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
