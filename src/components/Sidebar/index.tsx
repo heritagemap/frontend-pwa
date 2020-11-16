@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SidebarContext } from 'contexts/sidebarContext';
 
 import FullInfo from 'components/FullInfo';
@@ -19,18 +19,58 @@ interface SidebarPropsInterface {
   onClose?: () => void;
 }
 
+interface InfoInterface {
+  year: string;
+  description: string;
+  author: string;
+}
+
 const source = 'https://ru_monuments.toolforge.org/wikivoyage.php?id=';
+const RESOURCE = '/_api/heritage_info';
 
 const Sidebar = () => {
   const {
     sidebarIsOpen,
     monument,
-    onClose
+    onClose,
   }: SidebarPropsInterface = useContext(SidebarContext);
+
+  const [loading, setLoading] = useState(false);
+  const [info, setInfo] = useState<InfoInterface | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchInfo = async () => {
+      setLoading(true);
+      setInfo(undefined);
+
+      try {
+        const response = await fetch(
+          // @ts-ignore
+          RESOURCE + '?id=' + monument.id,
+        );
+
+        const text: string = await response.text();
+
+        const info: InfoInterface = JSON.parse(text);
+
+        console.log(info)
+
+        setInfo(info);
+      } catch(err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (monument && monument.id) {
+      fetchInfo();
+    }
+  }, [monument]);
 
   if (!sidebarIsOpen || !monument) return null;
 
-  const address = [monument.adm2, monument.adm2 != monument.adm3 ? monument.adm3 : '', monument.address].reduce((acc, item, index) => {
+  const address = [monument.adm2, monument.adm2 !== monument.adm3 ? monument.adm3 : '', monument.address].reduce((acc, item, index) => {
     if (!item) return acc;
     if (acc === '') return item;
     return acc + `, ${item}`;
@@ -47,6 +87,18 @@ const Sidebar = () => {
           </svg>
         </button>
       </div>
+
+      {info?.year && (
+        <time>{info.year}</time>
+      )}
+
+      {info?.description && (
+        <p>{info?.description}</p>
+      )}
+
+      {info?.author && (
+        <p>{info?.author}</p>
+      )}
 
       <div className={styles.info}>
         <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,10 +120,28 @@ const Sidebar = () => {
       )}
 
       {monument.image && (
-        <FullInfo image={monument.image} />
+        <FullInfo id={monument.id} image={monument.image} />
       )}
-      
-      <div className={styles.license}>Информация об объектах взята из <a href="https://ru.wikivoyage.org" target="_blank">Викигида</a><br /> Эти данные доступны по лицензии <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.ru" target="_blank">CC-By-SA 3.0</a></div>
+
+      <div className={styles.license}>
+        Информация об объектах взята из {}
+        <a
+          href="https://ru.wikivoyage.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Викигида
+        </a>
+        <br />
+        Эти данные доступны по лицензии {}
+        <a
+          href="https://creativecommons.org/licenses/by-sa/3.0/deed.ru"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          CC-By-SA 3.0
+        </a>
+      </div>
     </section>
   )
 }

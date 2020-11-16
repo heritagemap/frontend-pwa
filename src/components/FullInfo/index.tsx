@@ -8,18 +8,16 @@ import styles from './FullInfo.module.scss';
 const IMAGE_RESOURCE = '/_api/ru_monument_image?image=';
 const x2js = new X2JS();
 
-const FullInfo = ({ image }: { image?: string }) => {
+const FullInfo = ({ image, id }: { image?: string, id: number }) => {
   const [loading, setLoading] = useState(false);
-  const [licenses, setLicenses] = useState('');
+  const [licenses, setLicenses] = useState<string | undefined>('');
   const [file, setFile] = useState<FileInterface | undefined>(undefined);
-  const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchInfo = async () => {
+    const fetchImage = async () => {
       setLoading(true);
       setLicenses('');
       setFile(undefined);
-      setCategories([]);
 
       try {
         const response = await fetch(
@@ -28,7 +26,7 @@ const FullInfo = ({ image }: { image?: string }) => {
 
         const text: string = await response.text();
         const info = x2js.xml2js(text).response;
-        
+
         if (info?.licenses?.license?.name) {
           setLicenses(info.licenses.license.name);
         }
@@ -36,29 +34,22 @@ const FullInfo = ({ image }: { image?: string }) => {
         if (info?.file) {
           setFile(info.file);
         }
-
-        if (info?.categories?.category) {
-          const categoriesArray = Array.isArray(info.categories.category)
-            ? info.categories.category
-            : [info.categories.category]
-          setCategories(categoriesArray);
-        }
       } finally {
         setLoading(false);
       }
     }
 
-    fetchInfo();
+    fetchImage();
   }, [image]);
 
   return (
     <div className={styles.container}>
-      {loading && ('Загрузка...')}
+      {(loading) && ('Загрузка...')}
 
       {file && file.urls && (
         <>
           <img src={file.urls.file} alt={file.name || 'description'} width="320" />
-          
+
           <div className={styles.attributes}>
 
             {licenses && (
@@ -68,7 +59,7 @@ const FullInfo = ({ image }: { image?: string }) => {
             <span dangerouslySetInnerHTML={{ __html: file.author + ',' }} className={styles.author} />
 
             <span dangerouslySetInnerHTML={{ __html: file.date }} />
-            
+
           </div>
         </>
       )}

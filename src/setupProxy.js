@@ -24,4 +24,12 @@ module.exports = function(app) {
       changeOrigin: true,
     })
   );
+
+  app.use(
+    '/_api/heritage_info',
+    createProxyMiddleware({
+      target: 'https://ru_monuments.toolforge.org/wikivoyage1.php',
+      changeOrigin: true,
+    })
+  );
 };
