@@ -99,15 +99,15 @@ const Sidebar = () => {
       </div>
 
       {info?.year && (
-        <time>{info.year}</time>
+        <p className={styles.mainInfo}>{info.year}</p>
       )}
 
       {info?.description && (
-        <p>{info?.description}</p>
+        <p className={styles.mainInfo}>{info?.description}</p>
       )}
 
       {info?.author && (
-        <p>{info?.author}</p>
+        <p className={styles.mainInfo}>{info?.author}</p>
       )}
 
       <div className={styles.info}>
