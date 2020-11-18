@@ -56,10 +56,13 @@ const FullInfo = ({ image, id }: { image?: string, id: number }) => {
               <span dangerouslySetInnerHTML={{ __html: licenses }} className={styles.licenses} />
             )}
 
-            <span dangerouslySetInnerHTML={{ __html: file.author + ',' }} className={styles.author} />
+            {file.author && (
+              <span dangerouslySetInnerHTML={{ __html: file.author + ',' }} className={styles.author} />
+            )}
 
-            <span dangerouslySetInnerHTML={{ __html: file.date }} />
-
+            {file.date && (
+              <span dangerouslySetInnerHTML={{ __html: file.date }} />
+            )}
           </div>
         </>
       )}
