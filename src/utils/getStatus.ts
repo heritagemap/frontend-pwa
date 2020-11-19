@@ -13,7 +13,15 @@ const TYPE_OF_MONUMENT = {
   settlement0: 'Обладает признаками исторического поселения, не охраняется государством'
 };
 
+const IS_OFFICIAL = {
+  '0': '1',
+  '1': '1',
+  '2': '1',
+  '3': '1',
+  '4': '0'
+};
+
 export default function(type: Type, knid: string) {
   // @ts-ignore
-  return TYPE_OF_MONUMENT[type + knid[2]] || '';
+  return TYPE_OF_MONUMENT[type + IS_OFFICIAL[knid[2]]] || '';
 }

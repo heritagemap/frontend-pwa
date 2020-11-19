@@ -30,8 +30,13 @@ interface InfoInterface {
   protection?: 'Ф' | 'Р' | 'М' | 'В';
   type: Type;
   knid: string;
+  knid_new?: string;
   style?: string;
   wiki?: string;
+  sobory?: string;
+  temples?: string;
+  link?: string;
+  linkextra?: string;
 }
 
 const RESOURCE = '/_api/heritage_info';
@@ -115,13 +120,17 @@ const Sidebar = () => {
         <p className={styles.mainInfo}>{info?.author}</p>
       )}
 
-      {info?.wiki && (
+      {status && (
         <div className={styles.info}>
           <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1.9 9C1.9 7.84 2.84 6.9 4 6.9H8V5H4C1.79 5 0 6.79 0 9C0 11.21 1.79 13 4 13H8V11.1H4C2.84 11.1 1.9 10.16 1.9 9ZM14 5H10V6.9H14C15.16 6.9 16.1 7.84 16.1 9C16.1 10.16 15.16 11.1 14 11.1H10V13H14C16.21 13 18 11.21 18 9C18 6.79 16.21 5 14 5ZM6 10H12V8H6V10Z" fill="black"/>
+            <path d="M9 17.03C4.58 17.03 1 13.45 1 9.03003C1 4.61003 4.58 1.03003 9 1.03003C13.42 1.03003 17 4.61003 17 9.03003C17 13.45 13.42 17.03 9 17.03ZM10 5.06003H8V7.06003H10V5.06003ZM10 8.06003H8V13.06H10V8.06003Z" fill="black"/>
           </svg>
 
-          <a href={`https://ru.wikipedia.org/wiki/${info.wiki}`} target="_blank" rel="noopener noreferrer" className={styles.text}><span>Доп.информация</span></a>
+          <div className={styles.text}>{status}{protection ? protection + ' ' : ' '}
+          {info?.knid_new && (
+            <span className={styles.egrokn} title="Номер в Едином государственном реестре объектов культурного наследия">{info.knid_new}</span>
+          )}
+          </div>
         </div>
       )}
 
@@ -136,18 +145,58 @@ const Sidebar = () => {
         </div>
       )}
 
-      {status && (
+      {monument.image && (
+        <FullInfo id={monument.id} image={monument.image} />
+      )}
+
+      {info?.wiki && (
         <div className={styles.info}>
           <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 17.03C4.58 17.03 1 13.45 1 9.03003C1 4.61003 4.58 1.03003 9 1.03003C13.42 1.03003 17 4.61003 17 9.03003C17 13.45 13.42 17.03 9 17.03ZM10 5.06003H8V7.06003H10V5.06003ZM10 8.06003H8V13.06H10V8.06003Z" fill="black"/>
+            <path d="M1.9 9C1.9 7.84 2.84 6.9 4 6.9H8V5H4C1.79 5 0 6.79 0 9C0 11.21 1.79 13 4 13H8V11.1H4C2.84 11.1 1.9 10.16 1.9 9ZM14 5H10V6.9H14C15.16 6.9 16.1 7.84 16.1 9C16.1 10.16 15.16 11.1 14 11.1H10V13H14C16.21 13 18 11.21 18 9C18 6.79 16.21 5 14 5ZM6 10H12V8H6V10Z" fill="black"/>
           </svg>
 
-      <div className={styles.text}>{status} {protection ? `, ${protection}` : ''}</div>
+          <a href={`https://ru.wikipedia.org/wiki/${info.wiki}`} target="_blank" rel="noopener noreferrer" className={styles.text}><span>Статья в Википедии</span></a>
         </div>
       )}
 
-      {monument.image && (
-        <FullInfo id={monument.id} image={monument.image} />
+      {info?.sobory && (
+        <div className={styles.info}>
+          <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.9 9C1.9 7.84 2.84 6.9 4 6.9H8V5H4C1.79 5 0 6.79 0 9C0 11.21 1.79 13 4 13H8V11.1H4C2.84 11.1 1.9 10.16 1.9 9ZM14 5H10V6.9H14C15.16 6.9 16.1 7.84 16.1 9C16.1 10.16 15.16 11.1 14 11.1H10V13H14C16.21 13 18 11.21 18 9C18 6.79 16.21 5 14 5ZM6 10H12V8H6V10Z" fill="black"/>
+          </svg>
+
+          <a href={`https://sobory.ru/article/?object=${info.sobory}`} target="_blank" rel="noopener noreferrer" className={styles.text}><span>Объект на сайте sobory.ru</span></a>
+        </div>
+      )}
+
+      {info?.temples && (
+        <div className={styles.info}>
+          <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.9 9C1.9 7.84 2.84 6.9 4 6.9H8V5H4C1.79 5 0 6.79 0 9C0 11.21 1.79 13 4 13H8V11.1H4C2.84 11.1 1.9 10.16 1.9 9ZM14 5H10V6.9H14C15.16 6.9 16.1 7.84 16.1 9C16.1 10.16 15.16 11.1 14 11.1H10V13H14C16.21 13 18 11.21 18 9C18 6.79 16.21 5 14 5ZM6 10H12V8H6V10Z" fill="black"/>
+          </svg>
+
+          <a href={`http://temples.ru/card.php?ID=${info.temples}`} target="_blank" rel="noopener noreferrer" className={styles.text}><span>Объект в проекте «Храмы России»</span></a>
+        </div>
+      )}
+
+      {info?.link && (
+        <div className={styles.info}>
+          <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.9 9C1.9 7.84 2.84 6.9 4 6.9H8V5H4C1.79 5 0 6.79 0 9C0 11.21 1.79 13 4 13H8V11.1H4C2.84 11.1 1.9 10.16 1.9 9ZM14 5H10V6.9H14C15.16 6.9 16.1 7.84 16.1 9C16.1 10.16 15.16 11.1 14 11.1H10V13H14C16.21 13 18 11.21 18 9C18 6.79 16.21 5 14 5ZM6 10H12V8H6V10Z" fill="black"/>
+          </svg>
+
+          <a href={info.link} target="_blank" rel="noopener noreferrer" className={styles.text}><span>Дополнительная информация</span></a>
+        </div>
+      )}
+
+      {info?.linkextra && (
+        <div className={styles.info}>
+          <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.9 9C1.9 7.84 2.84 6.9 4 6.9H8V5H4C1.79 5 0 6.79 0 9C0 11.21 1.79 13 4 13H8V11.1H4C2.84 11.1 1.9 10.16 1.9 9ZM14 5H10V6.9H14C15.16 6.9 16.1 7.84 16.1 9C16.1 10.16 15.16 11.1 14 11.1H10V13H14C16.21 13 18 11.21 18 9C18 6.79 16.21 5 14 5ZM6 10H12V8H6V10Z" fill="black"/>
+          </svg>
+
+          <a href={info.linkextra} target="_blank" rel="noopener noreferrer" className={styles.text}><span>И ещё информация</span></a>
+        </div>
       )}
 
       <div className={styles.license}>
