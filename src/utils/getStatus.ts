@@ -14,8 +14,6 @@ const TYPE_OF_MONUMENT = {
 };
 
 export default function(type: Type, knid: string) {
-  const last_char = knid[knid.length - 1];
-
   // @ts-ignore
-  return TYPE_OF_MONUMENT[type + last_char] || '';
+  return TYPE_OF_MONUMENT[type + knid[2]] || '';
 }
