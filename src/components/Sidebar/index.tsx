@@ -1,10 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { SidebarContext } from 'contexts/sidebarContext';
+
+import { Type } from 'interfaces/FullInfo';
+import getStatus from 'utils/getStatus';
 
 import FullInfo from 'components/FullInfo';
 
 import styles from './Sidebar.module.scss';
+import getProtegtion from 'utils/getProtegtion';
 
 interface SidebarPropsInterface {
   sidebarIsOpen?: boolean;
@@ -21,22 +25,69 @@ interface SidebarPropsInterface {
   id?: number;
 }
 
-const source = 'https://ru_monuments.toolforge.org/wikivoyage.php?id=';
+interface InfoInterface {
+  year: string;
+  description: string;
+  author: string;
+  protection?: 'Ф' | 'Р' | 'М' | 'В';
+  type: Type;
+  knid: string;
+  style?: string;
+  wiki?: string;
+}
+
+const RESOURCE = '/_api/heritage_info';
 
 const Sidebar = () => {
   const {
     sidebarIsOpen,
     monument,
-    onClose
+    onClose,
   }: SidebarPropsInterface = useContext(SidebarContext);
+
+  const [loading, setLoading] = useState(false);
+  const [info, setInfo] = useState<InfoInterface | undefined>(undefined);
+
+  useEffect(() => {
+    const fetchInfo = async () => {
+      setLoading(true);
+      setInfo(undefined);
+
+      try {
+        const response = await fetch(
+          // @ts-ignore
+          RESOURCE + '?id=' + monument.id,
+        );
+
+        const text: string = await response.text();
+
+        const info: InfoInterface = JSON.parse(text);
+
+        console.log(info)
+
+        setInfo(info);
+      } catch(err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (monument && monument.id) {
+      fetchInfo();
+    }
+  }, [monument]);
 
   if (!sidebarIsOpen || !monument) return null;
 
-  const address = [monument.adm2, monument.adm2 != monument.adm3 ? monument.adm3 : '', monument.address].reduce((acc, item, index) => {
+  const address = [monument.adm2, monument.adm2 !== monument.adm3 ? monument.adm3 : '', monument.address].reduce((acc, item, index) => {
     if (!item) return acc;
     if (acc === '') return item;
     return acc + `, ${item}`;
   }, '');
+
+  const status = info ? getStatus(info.type, info.knid) : '';
+  const protection = info?.protection ? getProtegtion(info.protection) : '';
 
   return (
     <section className={styles.sidebar}>
@@ -50,18 +101,43 @@ const Sidebar = () => {
         </button>
       </div>
 
-      <div className={styles.info}>
-        <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M2.925 9C2.925 7.7175 3.9675 6.675 5.25 6.675H8.25V5.25H5.25C3.18 5.25 1.5 6.93 1.5 9C1.5 11.07 3.18 12.75 5.25 12.75H8.25V11.325H5.25C3.9675 11.325 2.925 10.2825 2.925 9ZM6 9.75H12V8.25H6V9.75ZM12.75 5.25H9.75V6.675H12.75C14.0325 6.675 15.075 7.7175 15.075 9C15.075 10.2825 14.0325 11.325 12.75 11.325H9.75V12.75H12.75C14.82 12.75 16.5 11.07 16.5 9C16.5 6.93 14.82 5.25 12.75 5.25Z" fill="#000"/>
-        </svg>
+      {info?.year && (
+        <p className={styles.mainInfo}>{info.year}</p>
+      )}
 
-        <a href={`${source}${monument.id}`} target="_blank" rel="noopener noreferrer" className={styles.text}><span>Доп.информация</span></a>
-      </div>
+      {info?.description && (
+        <p className={styles.mainInfo}>{info?.description}</p>
+      )}
+
+      {info?.style && (
+        <p className={styles.mainInfo}>Стиль: {info?.style}</p>
+      )}
+
+      {info?.author && (
+        <p className={styles.mainInfo}>{info?.author}</p>
+      )}
+
+      {info?.wiki && (
+        <div className={styles.info}>
+          <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1.9 9C1.9 7.84 2.84 6.9 4 6.9H8V5H4C1.79 5 0 6.79 0 9C0 11.21 1.79 13 4 13H8V11.1H4C2.84 11.1 1.9 10.16 1.9 9ZM14 5H10V6.9H14C15.16 6.9 16.1 7.84 16.1 9C16.1 10.16 15.16 11.1 14 11.1H10V13H14C16.21 13 18 11.21 18 9C18 6.79 16.21 5 14 5ZM6 10H12V8H6V10Z" fill="black"/>
+          </svg>
+
+          <a
+            href={`https://ru.wikipedia.org/wiki/${info.wiki}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.text}
+          >
+            <span>Доп.информация</span>
+          </a>
+        </div>
+      )}
 
       {address && (
         <div className={styles.info}>
           <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fillRule="evenodd" clipRule="evenodd" d="M9 1.5C6.0975 1.5 3.75 3.8475 3.75 6.75C3.75 10.6875 9 16.5 9 16.5C9 16.5 14.25 10.6875 14.25 6.75C14.25 3.8475 11.9025 1.5 9 1.5ZM9 8.625C7.965 8.625 7.125 7.785 7.125 6.75C7.125 5.715 7.965 4.875 9 4.875C10.035 4.875 10.875 5.715 10.875 6.75C10.875 7.785 10.035 8.625 9 8.625Z" fill="#000"/>
+            <path fillRule="evenodd" clipRule="evenodd" d="M3 6.95C3 3.6605 5.68286 1 9 1C12.3171 1 15 3.6605 15 6.95C15 11.4125 9 18 9 18C9 18 3 11.4125 3 6.95ZM9 9C10.1046 9 11 8.10457 11 7C11 5.89543 10.1046 5 9 5C7.89543 5 7 5.89543 7 7C7 8.10457 7.89543 9 9 9Z" fill="black"/>
           </svg>
 
 
@@ -69,11 +145,39 @@ const Sidebar = () => {
         </div>
       )}
 
-      {monument.image && (
-        <FullInfo image={monument.image} />
+      {status && (
+        <div className={styles.info}>
+          <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 17.03C4.58 17.03 1 13.45 1 9.03003C1 4.61003 4.58 1.03003 9 1.03003C13.42 1.03003 17 4.61003 17 9.03003C17 13.45 13.42 17.03 9 17.03ZM10 5.06003H8V7.06003H10V5.06003ZM10 8.06003H8V13.06H10V8.06003Z" fill="black"/>
+          </svg>
+
+          <div className={styles.text}>{status} {protection ? `, ${protection}` : ''}</div>
+        </div>
       )}
-      
-      <div className={styles.license}>Информация об объектах взята из <a href="https://ru.wikivoyage.org" target="_blank">Викигида</a><br /> Эти данные доступны по лицензии <a href="https://creativecommons.org/licenses/by-sa/3.0/deed.ru" target="_blank">CC-By-SA 3.0</a></div>
+
+      {monument.image && (
+        <FullInfo id={monument.id} image={monument.image} />
+      )}
+
+      <div className={styles.license}>
+        Информация об объектах взята из {}
+        <a
+          href="https://ru.wikivoyage.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Викигида
+        </a>
+        <br />
+        Эти данные доступны по лицензии {}
+        <a
+          href="https://creativecommons.org/licenses/by-sa/3.0/deed.ru"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          CC-By-SA 3.0
+        </a>
+      </div>
     </section>
   )
 }

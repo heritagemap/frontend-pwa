@@ -26,9 +26,9 @@ module.exports = function(app) {
   );
 
   app.use(
-    '/_api/info',
+    '/_api/heritage_info',
     createProxyMiddleware({
-      target: 'https://ru_monuments.toolforge.org/wikivoyage.php?',
+      target: 'https://ru_monuments.toolforge.org/wikivoyage1.php',
       changeOrigin: true,
     })
   );
