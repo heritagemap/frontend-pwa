@@ -93,6 +93,7 @@ const Sidebar = () => {
 
   const status = info ? getStatus(info.type, info.knid) : '';
   const protection = info?.protection ? getProtegtion(info.protection) : '';
+  const source = monument?.source ? 'https://' + monument.source.replace('w/index.php?title=', 'wiki/').replace(/&oldid=\d+/, '') : 'https://ru.wikivoyage.org/wiki/Культурное_наследие_России';
 
   return (
     <section className={styles.sidebar}>
@@ -218,7 +219,7 @@ const Sidebar = () => {
       <div className={styles.license}>
         Информация об объектах взята из {}
         <a
-          href="https://ru.wikivoyage.org"
+          href={source}
           target="_blank"
           rel="noopener noreferrer"
         >
