@@ -158,7 +158,6 @@ class MyMap extends Component<{ alert: AlertManager }> {
       );
 
       const { monuments } = await response.json();
-      console.log(monuments);
 
       this.setState({ monuments: monuments || [] });
 
