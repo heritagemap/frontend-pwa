@@ -1,6 +1,6 @@
 {
- "name": "Heritage Map",
- "short_name": "Heritage Map",
+ "name": "Карта культурного наследия России",
+ "short_name": "Карта наследия",
  "icons": [
   {
    "src": "\/android-icon-36x36.png",
