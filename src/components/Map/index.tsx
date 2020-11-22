@@ -18,7 +18,8 @@ import styles from './MyMap.module.scss';
 import ClusterMarker, { cluster as clusterInterface } from './ClusterMarker';
 
 const ACCESS_TOKEN ='pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
-const PAGES_RESOURCE = '/_api/heritage/?action=search&srcountry=ru&format=json&bbox=';
+const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&limit=5000&srcountry=ru&&props=id|name|address|municipality|lat|lon|image|source&bbox=';
+const MIN_ZOOM_LEVEL = 5;
 
 interface MyMapProps {
   viewport: {
@@ -77,9 +78,9 @@ class MyMap extends Component<{ alert: AlertManager }> {
     const width = document.body.offsetWidth;
     const height = document.body.offsetHeight;
     const { longitude, latitude, zoom } = viewport;
-    const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(12, zoom) });
+    const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) });
 
-    this.setState({ viewport, zoom: Math.max(12, zoom) });
+    this.setState({ viewport, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) });
 
     window.localStorage.setItem('viewport', JSON.stringify(viewport));
 
@@ -93,7 +94,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
 
       // @ts-ignore
       const { longitude, latitude, zoom } = JSON.parse(window.localStorage.getItem('viewport'));
-      const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(12, zoom) });
+      const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) });
       this.loadPoints(bbox);
       return;
     };
@@ -110,13 +111,13 @@ class MyMap extends Component<{ alert: AlertManager }> {
       const { zoom } = this.state.viewport;
 
       this.setState((prevState: { viewport: ViewportInterface }) => {
-        const viewport = { ...prevState.viewport, longitude, latitude, zoom: Math.max(12, zoom) };
+        const viewport = { ...prevState.viewport, longitude, latitude, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) };
         window.localStorage.setItem('viewport', JSON.stringify(viewport));
 
         return ({ viewport });
       })
 
-      const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(12, zoom) });
+      const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) });
       this.loadPointsWithDebounce(bbox);
     });
   }
@@ -228,7 +229,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
         </Cluster>
 
         {this.state.loading && (
-          <div className={styles.loading}>Загрузка...</div>
+          <div className={styles.loading}>Поиск объектов...</div>
         )}
       </MapGL>
     );
