@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { SidebarContext } from 'contexts/sidebarContext';
 
 import { InfoInterface } from 'interfaces/FullInfo';
 import getStatus from 'utils/getStatus';
@@ -12,7 +11,6 @@ import FullInfo from 'components/FullInfo';
 import styles from './Sidebar.module.scss';
 
 interface SidebarPropsInterface {
-  sidebarIsOpen?: boolean;
   monument?: {
     id: number;
     image?: string;
@@ -22,18 +20,12 @@ interface SidebarPropsInterface {
     name?: string;
     source?: string;
   };
-  onClose?: () => void;
-  onOpen?: () => {};
   id?: number;
 }
 
 const RESOURCE = '/_api/heritage_info';
 
 const Sidebar = () => {
-  const {
-    sidebarIsOpen,
-  }: SidebarPropsInterface = useContext(SidebarContext);
-
   const [loading, setLoading] = useState(false);
   const [info, setInfo] = useState<InfoInterface | undefined>(undefined);
   const [source, setSource] = useState<string>(SOURCE);
@@ -80,7 +72,7 @@ const Sidebar = () => {
     if (id) fetchInfo();
   }, [id]);
 
-  if (!sidebarIsOpen && !id) return null;
+  if (!id) return null;
 
   const status = info ? getStatus(info.type, info.knid) : '';
   const protection = info?.protection ? getProtegtion(info.protection) : '';
