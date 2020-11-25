@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import { SidebarContext } from 'contexts/sidebarContext';
 
-import { Type } from 'interfaces/FullInfo';
+import { InfoInterface } from 'interfaces/FullInfo';
 import getStatus from 'utils/getStatus';
+import getSource, { SOURCE } from 'utils/getSource';
+import getProtegtion from 'utils/getProtegtion';
 
 import FullInfo from 'components/FullInfo';
 
 import styles from './Sidebar.module.scss';
-import getProtegtion from 'utils/getProtegtion';
 
 interface SidebarPropsInterface {
   sidebarIsOpen?: boolean;
@@ -22,25 +23,8 @@ interface SidebarPropsInterface {
     source?: string;
   };
   onClose?: () => void;
+  onOpen?: () => {};
   id?: number;
-}
-
-interface InfoInterface {
-  knid: string;
-  type: Type;
-  status?: string;
-  precise?: string;
-  year: string;
-  description: string;
-  author: string;
-  protection?: 'Ф' | 'Р' | 'М' | 'В';
-  knid_new?: string;
-  style?: string;
-  wiki?: string;
-  sobory?: string;
-  temples?: string;
-  link?: string;
-  linkextra?: string;
 }
 
 const RESOURCE = '/_api/heritage_info';
@@ -48,12 +32,18 @@ const RESOURCE = '/_api/heritage_info';
 const Sidebar = () => {
   const {
     sidebarIsOpen,
-    monument,
-    onClose,
   }: SidebarPropsInterface = useContext(SidebarContext);
 
   const [loading, setLoading] = useState(false);
   const [info, setInfo] = useState<InfoInterface | undefined>(undefined);
+  const [source, setSource] = useState<string>(SOURCE);
+
+  let { id } = useParams();
+  const history = useHistory();
+
+  const handleClose = () => {
+    history.push('/');
+  }
 
   useEffect(() => {
     const fetchInfo = async () => {
@@ -63,7 +53,7 @@ const Sidebar = () => {
       try {
         const response = await fetch(
           // @ts-ignore
-          RESOURCE + '?id=' + monument.id,
+          RESOURCE + '?id=' + id,
         );
 
         const text: string = await response.text();
@@ -73,6 +63,13 @@ const Sidebar = () => {
         console.log(info)
 
         setInfo(info);
+        setSource(
+          getSource({
+            region: info?.region,
+            municipality: info?.municipality,
+            district: info?.district
+          })
+        );
       } catch(err) {
         console.log(err);
       } finally {
@@ -80,29 +77,20 @@ const Sidebar = () => {
       }
     }
 
-    if (monument && monument.id) {
-      fetchInfo();
-    }
-  }, [monument]);
+    if (id) fetchInfo();
+  }, [id]);
 
-  if (!sidebarIsOpen || !monument) return null;
-
-  const address = [monument.adm2, monument.adm2 !== monument.adm3 ? monument.adm3 : '', monument.address].reduce((acc, item, index) => {
-    if (!item) return acc;
-    if (acc === '') return item;
-    return acc + `, ${item}`;
-  }, '');
+  if (!sidebarIsOpen && !id) return null;
 
   const status = info ? getStatus(info.type, info.knid) : '';
   const protection = info?.protection ? getProtegtion(info.protection) : '';
-  const source = monument?.source ? 'https://' + monument.source.replace('w/index.php?title=', 'wiki/').replace(/&oldid=\d+/, '') : 'https://ru.wikivoyage.org/wiki/Культурное_наследие_России';
 
   return (
     <section className={styles.sidebar}>
       <div className={styles.header}>
-        <h1 className={styles.title}>{monument.name}</h1>
+        <h1 className={styles.title}>{info?.name}</h1>
 
-        <button onClick={onClose} className={styles.close}>
+        <button onClick={handleClose} className={styles.close}>
           <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="#000" />
           </svg>
@@ -155,18 +143,18 @@ const Sidebar = () => {
         </div>
       )}
 
-      {address && (
+      {info?.address && (
         <div className={styles.info}>
           <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fillRule="evenodd" clipRule="evenodd" d="M3 6.95C3 3.6605 5.68286 1 9 1C12.3171 1 15 3.6605 15 6.95C15 11.4125 9 18 9 18C9 18 3 11.4125 3 6.95ZM9 9C10.1046 9 11 8.10457 11 7C11 5.89543 10.1046 5 9 5C7.89543 5 7 5.89543 7 7C7 8.10457 7.89543 9 9 9Z" fill="black"/>
           </svg>
 
-          <div className={styles.text}>{address}</div>
+          <div className={styles.text}>{info.address}</div>
         </div>
       )}
 
-      {monument.image && (
-        <FullInfo id={monument.id} image={monument.image} />
+      {info?.image && (
+        <FullInfo id={id} image={info.image} />
       )}
 
       {info?.wiki && (

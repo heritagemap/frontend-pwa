@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { debounce } from 'lodash';
 import { withAlert, AlertManager } from 'react-alert';
+import { useParams } from 'react-router';
 
 import MapGL, { Marker, GeolocateControl, NavigationControl } from '@urbica/react-map-gl';
 import Cluster from '@urbica/react-map-gl-cluster';
@@ -21,7 +22,7 @@ const ACCESS_TOKEN ='pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29v
 const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&limit=5000&srcountry=ru&&props=id|name|address|municipality|lat|lon|image|source&bbox=';
 const MIN_ZOOM_LEVEL = 5;
 
-interface MyMapProps {
+interface MyMapParams {
   viewport: {
     latitude: number;
     longitude: number;
@@ -37,7 +38,7 @@ interface MyMapProps {
 }
 
 class MyMap extends Component<{ alert: AlertManager }> {
-  state = {
+  state: MyMapParams = {
     viewport: {
       latitude: 55.7522,
       longitude: 37.6155,
@@ -57,6 +58,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
   mapRef = React.createRef();
   sourceRef = React.createRef();
   cluster = React.createRef();
+
 
   loadPointsWithDebounce = debounce((bbox) => {
     this.loadPoints(bbox);
@@ -129,7 +131,7 @@ class MyMap extends Component<{ alert: AlertManager }> {
     const supercluster = this.cluster.current.getCluster();
     const zoom = supercluster.getClusterExpansionZoom(clusterId);
 
-    this.setState((prevState: MyMapProps) => {
+    this.setState((prevState: MyMapParams) => {
       return {
         viewport: {
           ...prevState.viewport,

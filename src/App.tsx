@@ -29,7 +29,7 @@ function App() {
         >
           <Map />
           <Switch>
-            <Route path="/:id" children={<Sidebar />} />
+            <Route path="/lat/:lat/lon/:lon/id/:id" children={<Sidebar />} />
           </Switch>
         </MarkerProvider>
       </main>

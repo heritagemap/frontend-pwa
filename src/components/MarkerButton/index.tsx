@@ -19,7 +19,7 @@ const MarkerButton: FC<MarkerButtonProps> = ({ item }) => {
   const handleMarkerClick = () => {
     setCurrentMonument(item);
     onOpen();
-    history.push(`/${item.id}`);
+    history.push(`/lat/${item.lat}/lon/${item.lon}/id/${item.id}`);
   }
 
   return (
