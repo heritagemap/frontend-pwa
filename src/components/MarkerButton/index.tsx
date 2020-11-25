@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { SidebarContext } from 'contexts/sidebarContext';
 import SidebarContextInterface from 'interfaces/SidebarContext';
 import MonumentInterface from 'interfaces/Monument';
@@ -12,8 +12,9 @@ interface MarkerButtonProps {
 
 const MarkerButton: FC<MarkerButtonProps> = ({ item }) => {
   // @ts-ignore
-  const { sidebarIsOpen, setCurrentMonument, onOpen, monument } : SidebarContextInterface | {} = useContext(SidebarContext);
-  const isActive = sidebarIsOpen && monument.id === item.id;
+  const { setCurrentMonument, onOpen } : SidebarContextInterface | {} = useContext(SidebarContext);
+  const params: { id?: string } = useParams();
+  const isActive = params?.id === item.id;
   let history = useHistory();
 
   const handleMarkerClick = () => {

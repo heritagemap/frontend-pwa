@@ -27,9 +27,18 @@ function App() {
             onClose: () => setSidebarIsOpen(false),
           }}
         >
-          <Map />
           <Switch>
-            <Route path="/lat/:lat/lon/:lon/id/:id" children={<Sidebar />} />
+            <Route
+              path="/lat/:lat/lon/:lon/id/:id"
+              children={
+                <>
+                  <Map />
+                  <Sidebar />
+                </>
+              }
+            />
+            <Route path="/lat/:lat/lon/:lon" children={<Map />} />
+            <Route path="/" children={<Map />} />
           </Switch>
         </MarkerProvider>
       </main>

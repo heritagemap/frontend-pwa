@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { debounce } from 'lodash';
 import { withAlert, AlertManager } from 'react-alert';
-import { useParams } from 'react-router';
 
 import MapGL, { Marker, GeolocateControl, NavigationControl } from '@urbica/react-map-gl';
 import Cluster from '@urbica/react-map-gl-cluster';
@@ -17,6 +16,7 @@ import MarkerButton from 'components/MarkerButton';
 
 import styles from './MyMap.module.scss';
 import ClusterMarker, { cluster as clusterInterface } from './ClusterMarker';
+import { withRouter } from 'react-router-dom';
 
 const ACCESS_TOKEN ='pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
 const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&limit=5000&srcountry=ru&&props=id|name|address|municipality|lat|lon|image|source&bbox=';
@@ -37,7 +37,7 @@ interface MyMapParams {
   loading: boolean;
 }
 
-class MyMap extends Component<{ alert: AlertManager }> {
+class MyMap extends Component<{ alert: AlertManager, match: { params: { lat: string; lon: string; } } }> {
   state: MyMapParams = {
     viewport: {
       latitude: 55.7522,
@@ -59,12 +59,30 @@ class MyMap extends Component<{ alert: AlertManager }> {
   sourceRef = React.createRef();
   cluster = React.createRef();
 
-
   loadPointsWithDebounce = debounce((bbox) => {
     this.loadPoints(bbox);
   }, 1000);
 
   componentDidMount() {
+    const { lat, lon } = this.props.match.params;
+
+    if (lat && lon) {
+      this.setState(
+        (prevState: MyMapParams) => (
+          {
+            viewport: {
+              ...prevState.viewport,
+              latitude: lat,
+              longitude: lon,
+              zoom: 17, // TODO: брать пользовательский
+            }
+          }
+        )
+      )
+
+      return;
+    }
+
     const viewport = window.localStorage.getItem('viewport');
 
     if (viewport) {
@@ -238,4 +256,5 @@ class MyMap extends Component<{ alert: AlertManager }> {
   }
 }
 
-export default withAlert()(MyMap);
+// @ts-ignore
+export default withRouter(withAlert()(MyMap));
