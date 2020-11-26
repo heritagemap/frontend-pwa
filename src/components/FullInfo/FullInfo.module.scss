@@ -6,14 +6,14 @@
 .attributes {
   color: #aaa;
   font-size: 12px;
-  
+
+  div {
+    display: inline-block;
+    margin-right: 4px;
+  }
+
   a:link,
   a:visited  {
     color: #aaa;
   }
-  
-  & > * {
-    margin-right: 4px;
-  }
-  
 }
