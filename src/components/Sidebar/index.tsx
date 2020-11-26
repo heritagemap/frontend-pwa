@@ -125,7 +125,6 @@ const Sidebar = () => {
             <path d="M9 17.03C4.58 17.03 1 13.45 1 9.03003C1 4.61003 4.58 1.03003 9 1.03003C13.42 1.03003 17 4.61003 17 9.03003C17 13.45 13.42 17.03 9 17.03ZM10 5.06003H8V7.06003H10V5.06003ZM10 8.06003H8V13.06H10V8.06003Z" fill="black"/>
           </svg>
 
-
           <div className={styles.text}>{status}{protection ? protection + ' ' : ' '}
           {info?.knid_new && (
             <span className={styles.egrokn} title="Номер в Едином государственном реестре объектов культурного наследия">{info.knid_new}</span>
