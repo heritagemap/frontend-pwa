@@ -14,7 +14,7 @@ const MarkerButton: FC<MarkerButtonProps> = ({ item }) => {
   let history = useHistory();
 
   const handleMarkerClick = () => {
-    history.push(`/lat/${item.lat}/lon/${item.lon}/id/${item.id}`);
+    history.push(`/lat/${item.lat}/lon/${item.lon}/${item.id}`);
   }
 
   return (

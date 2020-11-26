@@ -16,7 +16,7 @@ function App() {
       <main>
         <Switch>
           <Route
-            path="/lat/:lat/lon/:lon/id/:id"
+            path="/lat/:lat/lon/:lon/:id?"
             children={
               <>
                 <Map />
@@ -24,7 +24,6 @@ function App() {
               </>
             }
           />
-          <Route path="/lat/:lat/lon/:lon" children={<Map />} />
           <Route path="/" children={<Map />} />
         </Switch>
       </main>
