@@ -31,7 +31,7 @@ const Sidebar = () => {
   const [info, setInfo] = useState<InfoInterface | undefined>(undefined);
   const [source, setSource] = useState<string>(SOURCE);
 
-  let { id, lat, lon }: { id: string, lat: string, lon: string } = useParams();
+  let { id, lat, lon }: { id?: string | number, lat?: string, lon?: string } = useParams();
   const history = useHistory();
 
   const handleClose = () => {

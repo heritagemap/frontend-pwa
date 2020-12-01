@@ -8,7 +8,7 @@ import styles from './FullInfo.module.scss';
 const IMAGE_RESOURCE = '/_api/ru_monument_image?image=';
 const x2js = new X2JS();
 
-const FullInfo = ({ image, id }: { image?: string, id: number }) => {
+const FullInfo = ({ image, id }: { image?: string, id: number | string }) => {
   const [loading, setLoading] = useState(false);
   const [licenses, setLicenses] = useState<string | undefined>('');
   const [file, setFile] = useState<FileInterface | undefined>(undefined);
