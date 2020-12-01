@@ -15,16 +15,14 @@ function App() {
     <Router>
       <main>
         <Switch>
-          <Route
-            path="/lat/:lat/lon/:lon/:id?"
-            children={
-              <>
-                <Map />
-                <Sidebar />
-              </>
-            }
-          />
-          <Route path="/" children={<Map />} />
+          <Route path="/lat/:lat/lon/:lon/:id?">
+            <Map />
+            <Sidebar />
+          </Route>
+
+          <Route path="/">
+            <Map />
+          </Route>
         </Switch>
       </main>
     </Router>

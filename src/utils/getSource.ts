@@ -11,5 +11,5 @@ export const SOURCE = `https://ru.wikivoyage.org/wiki/Культурное_на�
 export default function({ region, municipality, district }: ParamsInterface) {
   if (!region) return SOURCE;
   // @ts-ignore
-  return SOURCE + '/' + REGIONS[region] + '/' + (municipality || district)
+  return `${SOURCE}/${REGIONS[region]}/${municipality || district}`;
 }

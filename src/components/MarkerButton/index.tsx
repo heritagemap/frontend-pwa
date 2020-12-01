@@ -12,7 +12,7 @@ interface MarkerButtonProps {
 const MarkerButton: FC<MarkerButtonProps> = ({ item }) => {
   const params: { id?: string } = useParams();
   const isActive = params?.id === item.id;
-  let history = useHistory();
+  const history = useHistory();
 
   const handleMarkerClick = () => {
     history.push(
