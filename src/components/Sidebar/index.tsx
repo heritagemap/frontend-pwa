@@ -11,19 +11,6 @@ import FullInfo from 'components/FullInfo';
 
 import styles from './Sidebar.module.scss';
 
-interface SidebarPropsInterface {
-  monument?: {
-    id: number;
-    image?: string;
-    adm2?: string;
-    adm3?: string;
-    address?: string;
-    name?: string;
-    source?: string;
-  };
-  id?: number;
-}
-
 const RESOURCE = '/_api/heritage_info';
 
 const Sidebar = () => {
@@ -82,6 +69,8 @@ const Sidebar = () => {
 
   return (
     <section className={styles.sidebar}>
+      {loading && 'Загрузка... '}
+
       <div className={styles.header}>
         <h1 className={styles.title}>{info?.name}</h1>
 
