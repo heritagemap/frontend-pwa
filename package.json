@@ -20,7 +20,7 @@
     "react-map-gl": "5.2.10",
     "react-map-gl-geocoder": "2.1.6",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.4",
+    "react-scripts": "4.0.1",
     "supercluster": "6.0.2",
     "typescript": "3.9.7",
     "unfetch": "4.2.0",
