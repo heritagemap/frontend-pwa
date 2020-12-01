@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import { useHistory, useParams } from "react-router-dom";
-import MonumentInterface from 'interfaces/Monument';
 
+import MonumentInterface from 'interfaces/Monument';
+import getRoute from 'utils/getRoute';
 import styles from './MarkerButton.module.scss';
 
 interface MarkerButtonProps {
@@ -14,7 +15,9 @@ const MarkerButton: FC<MarkerButtonProps> = ({ item }) => {
   let history = useHistory();
 
   const handleMarkerClick = () => {
-    history.push(`/lat/${item.lat}/lon/${item.lon}/${item.id}`);
+    history.push(
+      getRoute({ lat: item.lat, lon: item.lon, id: item.id }),
+    );
   }
 
   return (

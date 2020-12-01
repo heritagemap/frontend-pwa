@@ -4,6 +4,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { InfoInterface } from 'interfaces/FullInfo';
 import getStatus from 'utils/getStatus';
 import getSource, { SOURCE } from 'utils/getSource';
+import getRoute from 'utils/getRoute';
 import getProtegtion from 'utils/getProtegtion';
 
 import FullInfo from 'components/FullInfo';
@@ -30,11 +31,13 @@ const Sidebar = () => {
   const [info, setInfo] = useState<InfoInterface | undefined>(undefined);
   const [source, setSource] = useState<string>(SOURCE);
 
-  let { id } = useParams();
+  let { id, lat, lon }: { id: string, lat: string, lon: string } = useParams();
   const history = useHistory();
 
   const handleClose = () => {
-    history.push('/');
+    history.push(
+      getRoute({ lat, lon }),
+    );
   }
 
   useEffect(() => {

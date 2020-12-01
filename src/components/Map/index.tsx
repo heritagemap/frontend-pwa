@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { debounce } from 'lodash';
-import { withAlert, AlertManager } from 'react-alert';
+import { withAlert } from 'react-alert';
 
 import MapGL, { Marker, GeolocateControl, NavigationControl } from '@urbica/react-map-gl';
 import Cluster from '@urbica/react-map-gl-cluster';
@@ -9,7 +9,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Geocoder from 'react-map-gl-geocoder';
 
 import MonumentInterface from 'interfaces/Monument';
-import { ViewportInterface } from 'interfaces/Map';
+import { ViewportInterface, MapPropsInterface, MyMapParams } from 'interfaces/Map';
 import getBbox from 'utils/getBbox';
 
 import MarkerButton from 'components/MarkerButton';
@@ -17,27 +17,13 @@ import MarkerButton from 'components/MarkerButton';
 import styles from './MyMap.module.scss';
 import ClusterMarker, { cluster as clusterInterface } from './ClusterMarker';
 import { withRouter } from 'react-router-dom';
+import getRoute from 'utils/getRoute';
 
 const ACCESS_TOKEN ='pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
 const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&limit=5000&srcountry=ru&&props=id|name|address|municipality|lat|lon|image|source&bbox=';
 const MIN_ZOOM_LEVEL = 5;
 
-interface MyMapParams {
-  viewport: {
-    latitude: number;
-    longitude: number;
-    zoom: number;
-    bearing: number;
-    pitch: number;
-    width?: number;
-    height?: number;
-  };
-  searchValue: string;
-  monuments: [];
-  loading: boolean;
-}
-
-class MyMap extends Component<{ alert: AlertManager, match: { params: { lat: string; lon: string; } } }> {
+class MyMap extends Component<MapPropsInterface> {
   state: MyMapParams = {
     viewport: {
       latitude: 55.7522,
@@ -78,7 +64,7 @@ class MyMap extends Component<{ alert: AlertManager, match: { params: { lat: str
             }
           }
         )
-      )
+      );
 
       return;
     }
@@ -86,7 +72,11 @@ class MyMap extends Component<{ alert: AlertManager, match: { params: { lat: str
     const viewport = window.localStorage.getItem('viewport');
 
     if (viewport) {
-      this.setState({ viewport: JSON.parse(viewport) });
+      const { latitude, longitude } = JSON.parse(viewport);
+
+      this.props.history.push(
+        getRoute({ lat: latitude, lon: longitude }),
+      );
     }
   }
 
@@ -98,7 +88,7 @@ class MyMap extends Component<{ alert: AlertManager, match: { params: { lat: str
     const width = document.body.offsetWidth;
     const height = document.body.offsetHeight;
     const { longitude, latitude, zoom } = viewport;
-    const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) });
+    const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(MIN_ZOOM_LEVEL, Number(zoom)) });
 
     this.setState({ viewport, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) });
 
@@ -114,7 +104,7 @@ class MyMap extends Component<{ alert: AlertManager, match: { params: { lat: str
 
       // @ts-ignore
       const { longitude, latitude, zoom } = JSON.parse(window.localStorage.getItem('viewport'));
-      const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) });
+      const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(MIN_ZOOM_LEVEL, Number(zoom)) });
       this.loadPoints(bbox);
       return;
     };
@@ -131,13 +121,13 @@ class MyMap extends Component<{ alert: AlertManager, match: { params: { lat: str
       const { zoom } = this.state.viewport;
 
       this.setState((prevState: { viewport: ViewportInterface }) => {
-        const viewport = { ...prevState.viewport, longitude, latitude, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) };
+        const viewport = { ...prevState.viewport, longitude, latitude, zoom: Math.max(MIN_ZOOM_LEVEL, Number(zoom)) };
         window.localStorage.setItem('viewport', JSON.stringify(viewport));
 
         return ({ viewport });
       })
 
-      const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) });
+      const bbox = getBbox({ longitude, latitude, width, height, zoom: Math.max(MIN_ZOOM_LEVEL, Number(zoom)) });
       this.loadPointsWithDebounce(bbox);
     });
   }
