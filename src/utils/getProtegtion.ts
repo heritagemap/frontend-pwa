@@ -4,6 +4,8 @@ const PROTECTIONS = {
   М: " местного значения",
   В: ", выявленный"
 }
-export default function(protection: 'Ф' | 'Р' | 'М' | 'В') {
+const getProtection = function(protection: 'Ф' | 'Р' | 'М' | 'В') {
   return PROTECTIONS[protection] || '';
 }
+
+export default getProtection;

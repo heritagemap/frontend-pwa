@@ -1,4 +1,4 @@
-export default {
+const regions =  {
   'ru-ad': "Адыгея",
   'ru-ba': "Башкортостан",
   'ru-bu': "Бурятия",
@@ -85,3 +85,5 @@ export default {
   'ru-yam': "Ямало-Ненецкий автономный округ",
   'ru-sev': "Севастополь",
 }
+
+export default regions;

@@ -21,7 +21,9 @@ const IS_OFFICIAL = {
   '4': '0'
 };
 
-export default function(type: Type, knid: string) {
+const getStatus = function(type: Type, knid: string) {
   // @ts-ignore
   return TYPE_OF_MONUMENT[type + IS_OFFICIAL[knid[2]]] || '';
 }
+
+export default getStatus;

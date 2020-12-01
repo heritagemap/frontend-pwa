@@ -8,7 +8,7 @@ function toRadians(degrees: number) {
 };
 
 // @ts-ignore
-export default function ({ latitude, longitude, zoom, width, height }) {
+const getBbox = ({ latitude, longitude, zoom, width, height }) => {
   const metersPerPixelEW = EARTH_CIR_METERS / Math.pow(2, zoom + 8);
   const metersPerPixelNS = EARTH_CIR_METERS / Math.pow(2, zoom + 8) * Math.cos(toRadians(latitude));
 
@@ -21,3 +21,5 @@ export default function ({ latitude, longitude, zoom, width, height }) {
   // [south, west, north, east]
   return [longitude-shiftDegreesEW, latitude-shiftDegreesNS, longitude+shiftDegreesEW, latitude+shiftDegreesNS];
 }
+
+export default  getBbox;
