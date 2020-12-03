@@ -9,11 +9,7 @@ interface ParamsInterface {
 export const SOURCE =
   "https://ru.wikivoyage.org/wiki/Культурное_наследие_России";
 
-const getSource = function ({
-  region,
-  municipality,
-  district,
-}: ParamsInterface) {
+const getSource = ({ region, municipality, district }: ParamsInterface) => {
   if (!region) return SOURCE;
   // @ts-ignore
   return `${SOURCE}/${REGIONS[region]}/${municipality || district}`;
