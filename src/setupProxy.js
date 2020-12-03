@@ -1,34 +1,34 @@
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
-module.exports = function(app) {
+module.exports = function (app) {
   app.use(
-    '/_api/ru_monuments',
+    "/_api/ru_monuments",
     createProxyMiddleware({
-      target: 'https://tools.wmflabs.org/ru_monuments/monmap/api.php',
+      target: "https://tools.wmflabs.org/ru_monuments/monmap/api.php",
       changeOrigin: true,
     })
   );
 
   app.use(
-    '/_api/ru_monument_image',
+    "/_api/ru_monument_image",
     createProxyMiddleware({
-      target: 'https://magnus-toolserver.toolforge.org/commonsapi.php',
+      target: "https://magnus-toolserver.toolforge.org/commonsapi.php",
       changeOrigin: true,
     })
   );
 
   app.use(
-    '/_api/heritage',
+    "/_api/heritage",
     createProxyMiddleware({
-      target: 'https://heritage.toolforge.org/api/api.php',
+      target: "https://heritage.toolforge.org/api/api.php",
       changeOrigin: true,
     })
   );
 
   app.use(
-    '/_api/heritage_info',
+    "/_api/heritage_info",
     createProxyMiddleware({
-      target: 'https://ru_monuments.toolforge.org/wikivoyage1.php',
+      target: "https://ru_monuments.toolforge.org/wikivoyage1.php",
       changeOrigin: true,
     })
   );

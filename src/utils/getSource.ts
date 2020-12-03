@@ -1,17 +1,22 @@
-import REGIONS from 'constants/regions';
+import REGIONS from "constants/regions";
 
 interface ParamsInterface {
-  region?: string,
-  municipality?: string,
-  district?: string
-};
+  region?: string;
+  municipality?: string;
+  district?: string;
+}
 
-export const SOURCE = `https://ru.wikivoyage.org/wiki/Культурное_наследие_России`;
+export const SOURCE =
+  "https://ru.wikivoyage.org/wiki/Культурное_наследие_России";
 
-const getSource = function({ region, municipality, district }: ParamsInterface) {
+const getSource = function ({
+  region,
+  municipality,
+  district,
+}: ParamsInterface) {
   if (!region) return SOURCE;
   // @ts-ignore
   return `${SOURCE}/${REGIONS[region]}/${municipality || district}`;
-}
+};
 
 export default getSource;

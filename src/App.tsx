@@ -1,14 +1,10 @@
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-} from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-import Map from 'components/Map';
-import Sidebar from 'components/Sidebar';
+import Map from "components/Map";
+import Sidebar from "components/Sidebar";
 
-import './App.scss';
+import "./App.scss";
 
 function App() {
   return (
