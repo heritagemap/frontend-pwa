@@ -16,7 +16,6 @@
     "lodash": "4.17.20",
     "mapbox-gl": "1.12.0",
     "node-sass": "4.14.1",
-    "prettier": "^2.2.1",
     "react": "17.0.1",
     "react-alert": "7.0.2",
     "react-alert-template-basic": "1.0.0",
@@ -60,14 +59,9 @@
       }
     ]
   },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --write"
-    ]
-  },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": ""
     }
   },
   "browserslist": {
