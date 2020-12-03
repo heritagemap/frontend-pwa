@@ -17,7 +17,11 @@ export default function ({ latitude, longitude, zoom, width, height }) {
 
   const shiftDegreesEW = shiftMetersEW * degreesPerMeter;
   const shiftDegreesNS = shiftMetersNS * degreesPerMeter;
+  
+  const west = longitude-shiftDegreesEW < -180 ? -180 : longitude-shiftDegreesEW;
+  const south = latitude-shiftDegreesNS < -90 ? -90 : latitude-shiftDegreesNS;
+  const east = longitude+shiftDegreesEW > 180 ? 180 : longitude+shiftDegreesEW;
+  const north = latitude+shiftDegreesNS > 90 ? 90 : latitude+shiftDegreesNS;
 
-  // [south, west, north, east]
-  return [longitude-shiftDegreesEW, latitude-shiftDegreesNS, longitude+shiftDegreesEW, latitude+shiftDegreesNS];
+  return [west, south, east, north];
 }
