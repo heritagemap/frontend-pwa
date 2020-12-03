@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "4.7.0",
+    "@testing-library/jest-dom": "5.11.5",
     "@types/react-router-dom": "^5.1.6",
     "@urbica/react-map-gl": "1.14.2",
     "@urbica/react-map-gl-cluster": "0.2.0",
@@ -82,7 +83,6 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "5.11.5",
     "@testing-library/react": "11.1.1",
     "@testing-library/user-event": "12.2.0",
     "@types/classnames": "2.2.11",
