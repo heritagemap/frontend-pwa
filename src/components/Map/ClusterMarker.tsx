@@ -1,18 +1,18 @@
-import React from "react";
+import React from 'react';
 
-import { Marker } from "@urbica/react-map-gl";
+import { Marker } from '@urbica/react-map-gl';
 
-import styles from "./MyMap.module.scss";
+import styles from './MyMap.module.scss';
 
-export interface cluster {
+export interface Cluster {
   longitude: number;
   latitude: number;
   pointCount: number;
   clusterId: number;
 }
 
-interface ClusterMarkerProps extends cluster {
-  onClick: (newCluster: cluster) => void;
+interface ClusterMarkerProps extends Cluster {
+  onClick: (newCluster: Cluster) => void;
 }
 
 const ClusterMarker = ({
@@ -32,9 +32,9 @@ const ClusterMarker = ({
   };
   return (
     <Marker longitude={longitude} latitude={latitude}>
-      <div className={styles.cluster} onClick={handleClick}>
+      <button type="button" className={styles.cluster} onClick={handleClick}>
         {pointCount}
-      </div>
+      </button>
     </Marker>
   );
 };

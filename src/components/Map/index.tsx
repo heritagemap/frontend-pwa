@@ -1,36 +1,34 @@
-import React, { Component } from "react";
-import { debounce } from "lodash";
-import { withAlert } from "react-alert";
+import React, { Component } from 'react';
+import { debounce } from 'lodash';
+import { withAlert } from 'react-alert';
 
 import MapGL, {
   Marker,
   GeolocateControl,
   NavigationControl,
-} from "@urbica/react-map-gl";
-import Cluster from "@urbica/react-map-gl-cluster";
-import "mapbox-gl/dist/mapbox-gl.css";
+} from '@urbica/react-map-gl';
+import Cluster from '@urbica/react-map-gl-cluster';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
-import Geocoder from "react-map-gl-geocoder";
+import Geocoder from 'react-map-gl-geocoder';
 
-import MonumentInterface from "interfaces/Monument";
+import MonumentInterface from 'interfaces/Monument';
 import {
   ViewportInterface,
   MapPropsInterface,
   MyMapParams,
-} from "interfaces/Map";
-import getBbox from "utils/getBbox";
+} from 'interfaces/Map';
+import getBbox from 'utils/getBbox';
 
-import MarkerButton from "components/MarkerButton";
+import MarkerButton from 'components/MarkerButton';
 
-import { withRouter } from "react-router-dom";
-import getRoute from "utils/getRoute";
-import styles from "./MyMap.module.scss";
-import ClusterMarker, { cluster as clusterInterface } from "./ClusterMarker";
+import { withRouter } from 'react-router-dom';
+import getRoute from 'utils/getRoute';
+import styles from './MyMap.module.scss';
+import ClusterMarker, { Cluster as clusterInterface } from './ClusterMarker';
 
-const ACCESS_TOKEN =
-  "pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw";
-const PAGES_RESOURCE =
-  "/_api/heritage/?action=search&format=json&limit=5000&srcountry=ru&&props=id|name|address|municipality|lat|lon|image|source&bbox=";
+const ACCESS_TOKEN = 'pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
+const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&limit=5000&srcountry=ru&&props=id|name|address|municipality|lat|lon|image|source&bbox=';
 const MIN_ZOOM_LEVEL = 0;
 
 class MyMap extends Component<MapPropsInterface> {
@@ -44,7 +42,7 @@ class MyMap extends Component<MapPropsInterface> {
       width: undefined,
       height: undefined,
     },
-    searchValue: "",
+    searchValue: '',
     monuments: [],
     loading: false,
   };
@@ -77,7 +75,7 @@ class MyMap extends Component<MapPropsInterface> {
       return;
     }
 
-    const viewport = window.localStorage.getItem("viewport");
+    const viewport = window.localStorage.getItem('viewport');
 
     if (viewport) {
       const { latitude, longitude } = JSON.parse(viewport);
@@ -102,21 +100,22 @@ class MyMap extends Component<MapPropsInterface> {
       zoom: Math.max(MIN_ZOOM_LEVEL, Number(zoom)),
     });
 
+    // eslint-disable-next-line react/no-unused-state
     this.setState({ viewport, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) });
 
-    window.localStorage.setItem("viewport", JSON.stringify(viewport));
+    window.localStorage.setItem('viewport', JSON.stringify(viewport));
 
     this.loadPointsWithDebounce(bbox);
   };
 
   handleMapLoad = () => {
-    if (window.localStorage.getItem("viewport")) {
+    if (window.localStorage.getItem('viewport')) {
       const width = document.body.offsetWidth;
       const height = document.body.offsetHeight;
 
-      // @ts-ignore
       const { longitude, latitude, zoom } = JSON.parse(
-        window.localStorage.getItem("viewport")
+        // @ts-ignore
+        window.localStorage.getItem('viewport'),
       );
       const bbox = getBbox({
         longitude,
@@ -131,11 +130,11 @@ class MyMap extends Component<MapPropsInterface> {
 
     navigator.geolocation.getCurrentPosition((position) => {
       if (
-        !position.coords ||
-        !position.coords.latitude ||
-        !position.coords.longitude
+        !position.coords
+        || !position.coords.latitude
+        || !position.coords.longitude
       ) {
-        this.props.alert.show("Данные по геопозиции недоступны");
+        this.props.alert.show('Данные по геопозиции недоступны');
         return;
       }
 
@@ -151,7 +150,7 @@ class MyMap extends Component<MapPropsInterface> {
           latitude,
           zoom: Math.max(MIN_ZOOM_LEVEL, Number(zoom)),
         };
-        window.localStorage.setItem("viewport", JSON.stringify(viewport));
+        window.localStorage.setItem('viewport', JSON.stringify(viewport));
 
         return { viewport };
       });
@@ -186,7 +185,7 @@ class MyMap extends Component<MapPropsInterface> {
 
   loadPoints = async (bbox: Number[]) => {
     if (this.abortController) this.abortController.abort();
-    if (typeof window.AbortController === "function") {
+    if (typeof window.AbortController === 'function') {
       this.abortController = new window.AbortController();
     }
 
@@ -199,7 +198,7 @@ class MyMap extends Component<MapPropsInterface> {
           signal: this.abortController
             ? this.abortController.signal
             : undefined,
-        }
+        },
       );
 
       const { monuments } = await response.json();
@@ -207,12 +206,12 @@ class MyMap extends Component<MapPropsInterface> {
       this.setState({ monuments: monuments || [] });
 
       if (!monuments || monuments.length === 0) {
-        this.props.alert.show("Достопримечательности не найдены");
+        this.props.alert.show('Достопримечательности не найдены');
       }
     } catch (err) {
-      if (err.name === "AbortError") return;
+      if (err.name === 'AbortError') return;
 
-      this.props.alert.error("Что-то пошло не так");
+      this.props.alert.error('Что-то пошло не так');
       console.log(err);
     } finally {
       this.setState({ loading: false });
@@ -227,7 +226,7 @@ class MyMap extends Component<MapPropsInterface> {
         dragRotate={false}
         pitch={0}
         pitchWithRotate={false}
-        style={{ width: "100vw", height: "100vh" }}
+        style={{ width: '100vw', height: '100vh' }}
         accessToken={ACCESS_TOKEN}
         onViewportChange={this.handleGeolocateViewportChange}
         mapStyle="mapbox://styles/mapbox/streets-v9"

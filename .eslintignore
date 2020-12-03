@@ -1,0 +1,4 @@
+serviceWorker.ts
+build/*
+server.js
+src/setupProxy.js

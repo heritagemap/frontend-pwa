@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import X2JS from "x2js";
+import React, { useState, useEffect } from 'react';
+import X2JS from 'x2js';
 
-import { FileInterface } from "interfaces/FullInfo";
+import { FileInterface } from 'interfaces/FullInfo';
 
-import styles from "./FullInfo.module.scss";
+import styles from './FullInfo.module.scss';
 
-const IMAGE_RESOURCE = "/_api/ru_monument_image?image=";
+const IMAGE_RESOURCE = '/_api/ru_monument_image?image=';
 const x2js = new X2JS();
 
-const FullInfo = ({ image, id }: { image?: string; id: number | string }) => {
+const FullInfo = ({ image }: { image: string; }) => {
   const [loading, setLoading] = useState(false);
-  const [licenses, setLicenses] = useState<string | undefined>("");
+  const [licenses, setLicenses] = useState<string | undefined>('');
   const [file, setFile] = useState<FileInterface | undefined>(undefined);
 
   useEffect(() => {
     const fetchImage = async () => {
       setLoading(true);
-      setLicenses("");
+      setLicenses('');
       setFile(undefined);
 
       try {
@@ -42,13 +42,13 @@ const FullInfo = ({ image, id }: { image?: string; id: number | string }) => {
 
   return (
     <div className={styles.container}>
-      {loading && "Загрузка..."}
+      {loading && 'Загрузка...'}
 
       {file && file.urls && (
         <>
           <img
             src={file.urls.file}
-            alt={file.name || "description"}
+            alt={file.name || 'description'}
             width="320"
           />
 

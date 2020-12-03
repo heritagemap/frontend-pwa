@@ -1,4 +1,4 @@
-import REGIONS from "constants/regions";
+import REGIONS from 'constants/regions';
 
 interface ParamsInterface {
   region?: string;
@@ -6,8 +6,7 @@ interface ParamsInterface {
   district?: string;
 }
 
-export const SOURCE =
-  "https://ru.wikivoyage.org/wiki/Культурное_наследие_России";
+export const SOURCE = 'https://ru.wikivoyage.org/wiki/Культурное_наследие_России';
 
 const getSource = ({ region, municipality, district }: ParamsInterface) => {
   if (!region) return SOURCE;

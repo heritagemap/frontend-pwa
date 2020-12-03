@@ -30,12 +30,14 @@
   color: #fff;
   background: #6c2c04;
   border-radius: 20px;
+  border: none;
   text-align: center;
   font-size: 12px;
   cursor: pointer;
-  
+  outline: none;
+
   &:hover {
     background: #532203;
   }
-  
+
 }

@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 
-import { InfoInterface } from "interfaces/FullInfo";
-import getStatus from "utils/getStatus";
-import getSource, { SOURCE } from "utils/getSource";
-import getRoute from "utils/getRoute";
-import getProtegtion from "utils/getProtegtion";
+import { InfoInterface } from 'interfaces/FullInfo';
+import getStatus from 'utils/getStatus';
+import getSource, { SOURCE } from 'utils/getSource';
+import getRoute from 'utils/getRoute';
+import getProtegtion from 'utils/getProtegtion';
 
-import FullInfo from "components/FullInfo";
+import FullInfo from 'components/FullInfo';
 
-import styles from "./Sidebar.module.scss";
+import styles from './Sidebar.module.scss';
 
-const RESOURCE = "/_api/heritage_info";
+const RESOURCE = '/_api/heritage_info';
 
 const Sidebar = () => {
   const [loading, setLoading] = useState(false);
@@ -37,22 +37,22 @@ const Sidebar = () => {
       try {
         const response = await fetch(
           // @ts-ignore
-          `${RESOURCE}?id=${id}`
+          `${RESOURCE}?id=${id}`,
         );
 
         const text: string = await response.text();
 
-        const info: InfoInterface = JSON.parse(text);
+        const infoJSON: InfoInterface = JSON.parse(text);
 
-        console.log(info);
+        console.log(infoJSON);
 
-        setInfo(info);
+        setInfo(infoJSON);
         setSource(
           getSource({
-            region: info?.region,
-            municipality: info?.municipality,
-            district: info?.district,
-          })
+            region: infoJSON?.region,
+            municipality: infoJSON?.municipality,
+            district: infoJSON?.district,
+          }),
         );
       } catch (err) {
         console.log(err);
@@ -66,17 +66,17 @@ const Sidebar = () => {
 
   if (!id) return null;
 
-  const status = info ? getStatus(info.type, info.knid) : "";
-  const protection = info?.protection ? getProtegtion(info.protection) : "";
+  const status = info ? getStatus(info.type, info.knid) : '';
+  const protection = info?.protection ? getProtegtion(info.protection) : '';
 
   return (
     <section className={styles.sidebar}>
-      {loading && "Загрузка... "}
+      {loading && 'Загрузка... '}
 
       <div className={styles.header}>
         <h1 className={styles.title}>{info?.name}</h1>
 
-        <button onClick={handleClose} className={styles.close}>
+        <button type="button" onClick={handleClose} className={styles.close}>
           <svg
             width="24"
             height="24"
@@ -102,9 +102,9 @@ const Sidebar = () => {
 
       {info?.author && <p className={styles.mainInfo}>{info?.author}</p>}
 
-      {(info?.description || info?.status === "destroyed") && (
+      {(info?.description || info?.status === 'destroyed') && (
         <p className={styles.mainInfo}>
-          {info?.status === "destroyed" && (
+          {info?.status === 'destroyed' && (
             <span className={styles.destroyed}>
               <svg
                 width="18"
@@ -120,7 +120,7 @@ const Sidebar = () => {
 
               <span>
                 Утрачен
-                {info?.description ? ". " : ""}
+                {info?.description ? '. ' : ''}
               </span>
             </span>
           )}
@@ -145,7 +145,7 @@ const Sidebar = () => {
 
           <div className={styles.text}>
             {status}
-            {protection ? `${protection} ` : " "}
+            {protection ? `${protection} ` : ' '}
             {info?.knid_new && (
               <span
                 className={styles.egrokn}
@@ -178,7 +178,7 @@ const Sidebar = () => {
         </div>
       )}
 
-      {info?.image && <FullInfo id={id} image={info.image} />}
+      {info?.image && <FullInfo image={info.image} />}
 
       {info?.wiki && (
         <div className={styles.info}>
@@ -306,12 +306,16 @@ const Sidebar = () => {
       )}
 
       <div className={styles.license}>
-        Информация об объектах взята из {}
+        Информация об объектах взята из
+        {' '}
+        {}
         <a href={source} target="_blank" rel="noopener noreferrer">
           Викигида
         </a>
         <br />
-        Эти данные доступны по лицензии {}
+        Эти данные доступны по лицензии
+        {' '}
+        {}
         <a
           href="https://creativecommons.org/licenses/by-sa/3.0/deed.ru"
           target="_blank"

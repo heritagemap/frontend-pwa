@@ -34,7 +34,7 @@
     "build": "export REACT_APP_VERSION=$(git rev-parse HEAD) && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .ts,.tsx"
   },
   "eslintConfig": {
     "extends": [
@@ -46,18 +46,13 @@
       "project": "./tsconfig.json"
     },
     "rules": {
-      "additional-rule": "warn"
-    },
-    "overrides": [
-      {
-        "files": [
-          "**/*.ts?(x)"
-        ],
-        "rules": {
-          "additional-typescript-only-rule": "warn"
-        }
-      }
-    ]
+      "react/state-in-constructor": 0,
+      "react/jsx-props-no-spreading": 0,
+      "no-restricted-properties": 0,
+      "react/no-danger": 0,
+      "react/destructuring-assignment": 0,
+      "react/prop-types": 0
+    }
   },
   "husky": {
     "hooks": {
