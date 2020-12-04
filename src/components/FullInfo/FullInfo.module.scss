@@ -1,10 +1,12 @@
+@import 'variables';
+
 .container {
   margin: 24px 0;
   font-size: 14px;
 }
 
 .attributes {
-  color: #aaa;
+  color: $text;
   font-size: 12px;
 
   div {
@@ -13,7 +15,7 @@
   }
 
   a:link,
-  a:visited  {
-    color: #aaa;
+  a:visited {
+    color: $text;
   }
 }
