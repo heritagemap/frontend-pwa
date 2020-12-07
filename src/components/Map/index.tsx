@@ -31,21 +31,33 @@ const ACCESS_TOKEN = 'pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29
 const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&limit=5000&srcountry=ru&&props=id|name|address|municipality|lat|lon|image|source&bbox=';
 const MIN_ZOOM_LEVEL = 0;
 
-class MyMap extends Component<MapPropsInterface> {
-  state: MyMapParams = {
-    viewport: {
-      latitude: 55.7522,
-      longitude: 37.6155,
-      zoom: 10,
-      bearing: 0,
-      pitch: 0,
-      width: undefined,
-      height: undefined,
-    },
-    searchValue: '',
-    monuments: [],
-    loading: false,
-  };
+class MyMap extends Component<MapPropsInterface, MyMapParams> {
+  constructor(props: MapPropsInterface) {
+    super(props);
+
+    let prevPosition: { lat?: string, lon?: string } = {};
+
+    try {
+      prevPosition = JSON.parse(window.localStorage.getItem('viewport') || '');
+    } catch (err) {
+      console.log(err);
+    }
+
+    this.state = {
+      viewport: {
+        latitude: prevPosition?.lat || 55.7522,
+        longitude: prevPosition?.lon || 37.6155,
+        zoom: 10,
+        bearing: 0,
+        pitch: 0,
+        width: undefined,
+        height: undefined,
+      },
+      searchValue: '',
+      monuments: [],
+      loading: false,
+    };
+  }
 
   abortController: { abort: () => void; signal: any } | undefined = undefined;
 
@@ -92,20 +104,22 @@ class MyMap extends Component<MapPropsInterface> {
     const width = document.body.offsetWidth;
     const height = document.body.offsetHeight;
     const { longitude, latitude, zoom } = viewport;
+    const maxZoom = Math.max(MIN_ZOOM_LEVEL, Number(zoom));
+
     const bbox = getBbox({
       longitude,
       latitude,
       width,
       height,
-      zoom: Math.max(MIN_ZOOM_LEVEL, Number(zoom)),
+      zoom: maxZoom,
     });
 
-    // eslint-disable-next-line react/no-unused-state
-    this.setState({ viewport, zoom: Math.max(MIN_ZOOM_LEVEL, zoom) });
+    this.setState((prevState) => ({ viewport: { ...prevState.viewport, zoom: maxZoom } }));
 
     window.localStorage.setItem('viewport', JSON.stringify(viewport));
 
     this.loadPointsWithDebounce(bbox);
+    this.props.history.push(getRoute({ lat: latitude, lon: longitude }));
   };
 
   handleMapLoad = () => {
