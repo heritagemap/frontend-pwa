@@ -32,6 +32,18 @@ const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&limit=5000&src
 const MIN_ZOOM_LEVEL = 0;
 
 class MyMap extends Component<MapPropsInterface, MyMapParams> {
+  loadPointsWithDebounce = debounce((bbox) => {
+    this.loadPoints(bbox);
+  }, 1000);
+
+  abortController: { abort: () => void; signal: any } | undefined = undefined;
+
+  mapRef = React.createRef();
+
+  sourceRef = React.createRef();
+
+  cluster = React.createRef();
+
   constructor(props: MapPropsInterface) {
     super(props);
 
@@ -58,18 +70,6 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
       loading: false,
     };
   }
-
-  abortController: { abort: () => void; signal: any } | undefined = undefined;
-
-  mapRef = React.createRef();
-
-  sourceRef = React.createRef();
-
-  cluster = React.createRef();
-
-  loadPointsWithDebounce = debounce((bbox) => {
-    this.loadPoints(bbox);
-  }, 1000);
 
   componentDidMount() {
     const { lat, lon } = this.props.match.params;

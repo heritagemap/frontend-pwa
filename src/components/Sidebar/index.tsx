@@ -16,7 +16,7 @@ import {
   Address,
   Wiki,
   Sobory,
-  Link,
+  LinkIcon,
   ExtraLink,
   Templates,
 } from 'icons';
@@ -197,7 +197,7 @@ const Sidebar = () => {
 
       {info?.link && (
         <div className={styles.info}>
-          <Link />
+          <LinkIcon />
 
           <a
             href={info.link}
