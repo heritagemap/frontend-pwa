@@ -3,6 +3,9 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import MonumentInterface from 'interfaces/Monument';
 import getRoute from 'utils/getRoute';
+
+import Point from 'icons/Point';
+
 import styles from './MarkerButton.module.scss';
 
 interface MarkerButtonProps {
@@ -21,21 +24,7 @@ const MarkerButton: FC<MarkerButtonProps> = ({ item }) => {
   return (
     <>
       <button type="button" className={styles.button} onClick={handleMarkerClick}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          width="24"
-          height="24"
-        >
-          <circle
-            cx="12"
-            cy="12"
-            r={isActive ? '8' : '7'}
-            fill={isActive ? '#e33201' : '#6c2c04'}
-            stroke="#fff"
-            strokeWidth={isActive ? '2.2' : '2'}
-          />
-        </svg>
+        <Point isActive={isActive} />
       </button>
     </>
   );
