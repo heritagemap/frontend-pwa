@@ -1,8 +1,8 @@
 import { AlertManager } from 'react-alert';
 
 export interface ViewportInterface {
-  latitude?: number,
-  longitude?: number,
+  latitude?: number | string,
+  longitude?: number | string,
   zoom?: number,
   bearing?: number,
   pitch?: number,
