@@ -9,9 +9,9 @@ jest.mock('mapbox-gl', () => ({
   Map: jest.fn(() => ({
     addControl: jest.fn(),
     on: jest.fn(),
-    remove: jest.fn()
+    remove: jest.fn(),
   })),
-  NavigationControl: jest.fn()
+  NavigationControl: jest.fn(),
 }));
 
 jest.mock('react-map-gl-geocoder', () => () => null);

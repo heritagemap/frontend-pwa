@@ -8,7 +8,7 @@ import styles from './FullInfo.module.scss';
 const IMAGE_RESOURCE = '/_api/ru_monument_image?image=';
 const x2js = new X2JS();
 
-const FullInfo = ({ image, id }: { image?: string, id: number | string }) => {
+const FullInfo = ({ image }: { image: string; }) => {
   const [loading, setLoading] = useState(false);
   const [licenses, setLicenses] = useState<string | undefined>('');
   const [file, setFile] = useState<FileInterface | undefined>(undefined);
@@ -20,9 +20,7 @@ const FullInfo = ({ image, id }: { image?: string, id: number | string }) => {
       setFile(undefined);
 
       try {
-        const response = await fetch(
-          IMAGE_RESOURCE + image,
-        );
+        const response = await fetch(IMAGE_RESOURCE + image);
 
         const text: string = await response.text();
         const info = x2js.xml2js(text).response;
@@ -37,26 +35,36 @@ const FullInfo = ({ image, id }: { image?: string, id: number | string }) => {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchImage();
   }, [image]);
 
   return (
     <div className={styles.container}>
-      {(loading) && ('Загрузка...')}
+      {loading && 'Загрузка...'}
 
       {file && file.urls && (
         <>
-          <img src={file.urls.file} alt={file.name || 'description'} width="320" />
+          <img
+            src={file.urls.file}
+            alt={file.name || 'description'}
+            width="320"
+          />
 
           <div className={styles.attributes}>
             {licenses && (
-              <div dangerouslySetInnerHTML={{ __html: licenses }} className={styles.licenses} />
+              <div
+                dangerouslySetInnerHTML={{ __html: licenses }}
+                className={styles.licenses}
+              />
             )}
 
             {file.author && (
-              <div dangerouslySetInnerHTML={{ __html: file.author + ',' }} className={styles.author} />
+              <div
+                dangerouslySetInnerHTML={{ __html: `${file.author},` }}
+                className={styles.author}
+              />
             )}
 
             {file.date && (
@@ -66,7 +74,7 @@ const FullInfo = ({ image, id }: { image?: string, id: number | string }) => {
         </>
       )}
     </div>
-  )
-}
+  );
+};
 
 export default FullInfo;

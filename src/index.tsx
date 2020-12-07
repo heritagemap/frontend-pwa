@@ -2,12 +2,12 @@ import 'unfetch/polyfill';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { transitions, Provider as AlertProvider } from 'react-alert'
-import AlertTemplate from 'react-alert-template-basic'
+import { transitions, Provider as AlertProvider } from 'react-alert';
+import AlertTemplate from 'react-alert-template-basic';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import './index.css';
+import './index.scss';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -15,8 +15,8 @@ import * as serviceWorker from './serviceWorker';
 const options = {
   // you can also just use 'bottom center'
   timeout: 5000,
-  transition: transitions.SCALE
-}
+  transition: transitions.SCALE,
+};
 
 console.log('APP_LAST_COMMIT: ', process.env.REACT_APP_VERSION);
 
@@ -26,7 +26,7 @@ ReactDOM.render(
       <App />
     </AlertProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want your app to work offline and load faster, you can change

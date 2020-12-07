@@ -1,3 +1,5 @@
+@import 'variables';
+
 .navigationControl {
   position: absolute;
   top: 118px;
@@ -28,14 +30,15 @@
   width: 30px;
   height: 30px;
   color: #fff;
-  background: #6c2c04;
+  background: $primary;
   border-radius: 20px;
+  border: none;
   text-align: center;
   font-size: 12px;
   cursor: pointer;
-  
+  outline: none;
+
   &:hover {
-    background: #532203;
+    background: $primaryHover;
   }
-  
 }

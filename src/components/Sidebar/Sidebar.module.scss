@@ -1,3 +1,5 @@
+@import 'variables';
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -8,7 +10,7 @@
   max-width: 360px;
   padding: 13px 16px;
   background-color: #fff;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
   overflow: auto;
   font-size: 14px;
@@ -32,11 +34,11 @@
   width: 48px;
   height: 48px;
   cursor: pointer;
-  opacity: .8;
-  
+  opacity: 0.8;
+
   &:hover {
     opacity: 1;
-  }  
+  }
 }
 
 .title {
@@ -49,22 +51,21 @@
   color: red;
   font-weight: bold;
   margin-bottom: 16px;
-  
+
   svg {
     margin: 0 0 -3px 0;
   }
-  
+
   span {
     margin-left: 2px;
   }
-  
 }
 
 .mainInfo {
   display: block;
   margin-block-start: 0;
   margin-block-end: 10px;
-  
+
   &:last-of-type {
     margin-block-end: 16px;
   }
@@ -94,14 +95,13 @@
 
 .license {
   margin-top: 40px;
-  color: #aaa;
+  color: $text;
   font-size: 12px;
-  
+
   a:link,
-  a:visited  {
-    color: #aaa;
+  a:visited {
+    color: $text;
   }
-  
 }
 
 .egrokn {
@@ -113,5 +113,5 @@
   display: inline-block;
   white-space: nowrap;
   cursor: help;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
 }

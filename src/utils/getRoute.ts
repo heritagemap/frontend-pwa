@@ -4,10 +4,16 @@ interface RouteParamsInterface {
   id?: string | number;
 }
 
-export default function(params: RouteParamsInterface) {
+const getRoute = (params: RouteParamsInterface) => (
   // @ts-ignore
-  return Object.keys(params).reduce((acc: string, item: 'lat' | 'lon' | 'id') => {
-    if (item === 'id') return acc + `/${params[item]}`;
-    return acc + `/${item}/${params[item]}`;
-  }, '');
-}
+  Object.keys(params).reduce(
+    (acc: string, item: string) => {
+      if (item === 'id') return `${acc}/${params[item]}`;
+      // @ts-ignore
+      return `${acc}/${item}/${params[item]}`;
+    },
+    '',
+  )
+);
+
+export default getRoute;
