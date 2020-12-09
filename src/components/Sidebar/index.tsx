@@ -112,12 +112,14 @@ const Sidebar = () => {
 
               <span>
                 Утрачен
-                {info?.description ? '. ' : ''}
+                {info?.description && '. '}
               </span>
             </span>
           )}
 
-          {info?.description && <span>{info?.description}</span>}
+          {info?.description && (
+            <span dangerouslySetInnerHTML={{ __html: info.description }} />
+          )}
         </p>
       )}
 
