@@ -54,9 +54,9 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
 
     if (!lat && !lon) {
       try {
-        prevPosition = JSON.parse(window.localStorage.getItem('viewport') || '');
+        prevPosition = JSON.parse(window.localStorage.getItem('viewport') || '{}');
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     }
 
