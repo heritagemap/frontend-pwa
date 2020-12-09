@@ -24,3 +24,10 @@ export interface MyMapParams {
   monuments: [];
   loading: boolean;
 }
+
+export interface CoordsInterface {
+  coords: {
+    latitude: number;
+    longitude: number;
+  };
+}

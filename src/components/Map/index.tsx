@@ -17,6 +17,7 @@ import {
   ViewportInterface,
   MapPropsInterface,
   MyMapParams,
+  CoordsInterface,
 } from 'interfaces/Map';
 import getBbox from 'utils/getBbox';
 
@@ -29,7 +30,7 @@ import ClusterMarker, { Cluster as clusterInterface } from './ClusterMarker';
 
 const ACCESS_TOKEN = 'pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
 const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&limit=5000&srcountry=ru&&props=id|name|address|municipality|lat|lon|image|source&bbox=';
-const MIN_ZOOM_LEVEL = 5;
+const MIN_ZOOM_LEVEL = 0;
 
 class MyMap extends Component<MapPropsInterface, MyMapParams> {
   loadPointsWithDebounce = debounce((bbox) => {
@@ -130,8 +131,7 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
     this.props.history.push(getRoute({ lat: latitude, lon: longitude }));
   };
 
-  // @ts-ignore
-  handleGeolocate = ({ coords }) => {
+  handleGeolocate = ({ coords }: CoordsInterface) => {
     const width = document.body.offsetWidth;
     const height = document.body.offsetHeight;
     const { longitude, latitude } = coords;
