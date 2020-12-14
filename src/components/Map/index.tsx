@@ -62,8 +62,8 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
 
     this.state = {
       viewport: {
-        latitude: lat || prevPosition?.lat || 55.7522,
-        longitude: lon || prevPosition?.lon || 37.6155,
+        latitude: lat || prevPosition?.lat,
+        longitude: lon || prevPosition?.lon,
         zoom: 15,
         bearing: 0,
         pitch: 0,
