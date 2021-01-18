@@ -10,6 +10,12 @@ export interface ViewportInterface {
   height?: number,
 }
 
+export interface MapParamsInterface {
+  latitude: number | string;
+  longitude: number | string;
+  zoom: number | string;
+}
+
 export interface MapPropsInterface {
   alert: AlertManager,
   match: {
