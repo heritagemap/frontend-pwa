@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { debounce } from 'lodash';
 import { withAlert } from 'react-alert';
+import { withRouter } from 'react-router-dom';
 
 import MapGL, {
   Marker,
@@ -20,17 +21,17 @@ import {
   CoordsInterface,
 } from 'interfaces/Map';
 import getBbox from 'utils/getBbox';
+import getRoute from 'utils/getRoute';
+import {
+  ACCESS_TOKEN,
+  PAGES_RESOURCE,
+  MIN_ZOOM_LEVEL,
+} from 'constants/map';
 
 import MarkerButton from 'components/MarkerButton';
 
-import { withRouter } from 'react-router-dom';
-import getRoute from 'utils/getRoute';
 import styles from './MyMap.module.scss';
 import ClusterMarker, { Cluster as clusterInterface } from './ClusterMarker';
-
-const ACCESS_TOKEN = 'pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
-const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&limit=5000&srcountry=ru&&props=id|name|address|municipality|lat|lon|image|source&bbox=';
-const MIN_ZOOM_LEVEL = 0;
 
 class MyMap extends Component<MapPropsInterface, MyMapParams> {
   loadPointsWithDebounce = debounce((mapParams: MapParamsInterface) => {
@@ -48,22 +49,12 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
   constructor(props: MapPropsInterface) {
     super(props);
 
-    let prevPosition: { lat?: string, lon?: string } = {};
-
     const { lat, lon } = this.props.match.params;
-
-    if (!lat && !lon) {
-      try {
-        prevPosition = JSON.parse(window.localStorage.getItem('viewport') || '{}');
-      } catch (err) {
-        console.error(err);
-      }
-    }
 
     this.state = {
       viewport: {
-        latitude: lat || prevPosition?.lat,
-        longitude: lon || prevPosition?.lon,
+        latitude: lat,
+        longitude: lon,
         zoom: 15,
         bearing: 0,
         pitch: 0,
@@ -76,22 +67,14 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
     };
   }
 
-  componentDidMount() {
-    const { lat, lon } = this.props.match.params;
-
-    if (!lat || !lon) {
-      this.props.history.push(
-        getRoute(
-          {
-            lat: this.state.viewport.latitude,
-            lon: this.state.viewport.longitude,
-          },
-        ),
-      );
-    }
-  }
-
   componentDidUpdate(prevProps: MapPropsInterface, prevState: MyMapParams) {
+    if (this.props.match.params.lat !== this.state.viewport.latitude) {
+      this.handleGeolocateViewportChange({
+        ...this.state.viewport,
+        latitude: this.props.match.params.lat,
+        longitude: this.props.match.params.lon,
+      });
+    }
     const updatedViewport = JSON.stringify(this.state.viewport);
     if (JSON.stringify(prevState.viewport) !== updatedViewport && window?.localStorage) {
       window.localStorage.setItem('viewport', updatedViewport);
@@ -105,6 +88,7 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
   handleGeolocateViewportChange = (viewport: any) => {
     const { longitude, latitude, zoom } = viewport;
     const maxZoom = Math.max(MIN_ZOOM_LEVEL, Number(zoom));
+    const { lat, lon } = this.props.match.params;
 
     this.setState((prevState) => (
       {
@@ -118,7 +102,9 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
     ));
 
     this.loadPointsWithDebounce({ latitude, longitude, zoom: maxZoom });
-    this.props.history.push(getRoute({ lat: latitude, lon: longitude }));
+    if (lat !== latitude || lon !== longitude) {
+      this.props.history.push(getRoute({ lat: latitude, lon: longitude }));
+    }
   };
 
   handleGeolocate = ({ coords }: CoordsInterface) => {
@@ -171,7 +157,7 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
       latitude: Number(latitude),
       longitude: Number(longitude),
       zoom: Number(zoom),
-    })
+    });
 
     try {
       const response = await fetch(
