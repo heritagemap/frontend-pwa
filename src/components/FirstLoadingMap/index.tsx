@@ -9,7 +9,7 @@ const DefaultMap = () => {
 
   useEffect(() => {
     const checkCurrentPosition = () => {
-      navigator.geolocation.getCurrentPosition((position) => {
+      navigator?.geolocation?.getCurrentPosition((position) => {
         if (
           !position.coords
           || !position.coords.latitude
