@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { debounce } from 'lodash';
 import { withAlert } from 'react-alert';
+import { withRouter } from 'react-router-dom';
 
 import MapGL, {
   Marker,
@@ -14,26 +15,27 @@ import Geocoder from 'react-map-gl-geocoder';
 
 import MonumentInterface from 'interfaces/Monument';
 import {
-  ViewportInterface,
+  MapParamsInterface,
   MapPropsInterface,
   MyMapParams,
+  CoordsInterface,
 } from 'interfaces/Map';
 import getBbox from 'utils/getBbox';
+import getRoute from 'utils/getRoute';
+import {
+  ACCESS_TOKEN,
+  PAGES_RESOURCE,
+  MIN_ZOOM_LEVEL,
+} from 'constants/map';
 
 import MarkerButton from 'components/MarkerButton';
 
-import { withRouter } from 'react-router-dom';
-import getRoute from 'utils/getRoute';
 import styles from './MyMap.module.scss';
 import ClusterMarker, { Cluster as clusterInterface } from './ClusterMarker';
 
-const ACCESS_TOKEN = 'pk.eyJ1IjoieXVsaWEtYXZkZWV2YSIsImEiOiJjazh0enUyOGEwNTR1M29va3I0YXMweXR5In0.6S0Dy1MTrzcgLlQEHtF2Aw';
-const PAGES_RESOURCE = '/_api/heritage/?action=search&format=json&limit=5000&srcountry=ru&&props=id|name|address|municipality|lat|lon|image|source&bbox=';
-const MIN_ZOOM_LEVEL = 0;
-
 class MyMap extends Component<MapPropsInterface, MyMapParams> {
-  loadPointsWithDebounce = debounce((bbox) => {
-    this.loadPoints(bbox);
+  loadPointsWithDebounce = debounce((mapParams: MapParamsInterface) => {
+    this.loadPoints(mapParams);
   }, 1000);
 
   abortController: { abort: () => void; signal: any } | undefined = undefined;
@@ -47,19 +49,13 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
   constructor(props: MapPropsInterface) {
     super(props);
 
-    let prevPosition: { lat?: string, lon?: string } = {};
-
-    try {
-      prevPosition = JSON.parse(window.localStorage.getItem('viewport') || '');
-    } catch (err) {
-      console.log(err);
-    }
+    const { lat, lon } = this.props.match.params;
 
     this.state = {
       viewport: {
-        latitude: prevPosition?.lat || 55.7522,
-        longitude: prevPosition?.lon || 37.6155,
-        zoom: 10,
+        latitude: lat,
+        longitude: lon,
+        zoom: 15,
         bearing: 0,
         pitch: 0,
         width: undefined,
@@ -71,28 +67,17 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
     };
   }
 
-  componentDidMount() {
-    const { lat, lon } = this.props.match.params;
-
-    if (lat && lon) {
-      this.setState((prevState: MyMapParams) => ({
-        viewport: {
-          ...prevState.viewport,
-          latitude: lat,
-          longitude: lon,
-          zoom: 17, // TODO: брать пользовательский
-        },
-      }));
-
-      return;
+  componentDidUpdate(prevProps: MapPropsInterface, prevState: MyMapParams) {
+    if (this.props.match.params.lat !== this.state.viewport.latitude) {
+      this.handleGeolocateViewportChange({
+        ...this.state.viewport,
+        latitude: this.props.match.params.lat,
+        longitude: this.props.match.params.lon,
+      });
     }
-
-    const viewport = window.localStorage.getItem('viewport');
-
-    if (viewport) {
-      const { latitude, longitude } = JSON.parse(viewport);
-
-      this.props.history.push(getRoute({ lat: latitude, lon: longitude }));
+    const updatedViewport = JSON.stringify(this.state.viewport);
+    if (JSON.stringify(prevState.viewport) !== updatedViewport && window?.localStorage) {
+      window.localStorage.setItem('viewport', updatedViewport);
     }
   }
 
@@ -101,83 +86,41 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
   }
 
   handleGeolocateViewportChange = (viewport: any) => {
-    const width = document.body.offsetWidth;
-    const height = document.body.offsetHeight;
     const { longitude, latitude, zoom } = viewport;
     const maxZoom = Math.max(MIN_ZOOM_LEVEL, Number(zoom));
+    const { lat, lon } = this.props.match.params;
 
-    const bbox = getBbox({
-      longitude,
-      latitude,
-      width,
-      height,
-      zoom: maxZoom,
-    });
+    this.setState((prevState) => (
+      {
+        viewport: {
+          ...prevState.viewport,
+          longitude,
+          latitude,
+          zoom: maxZoom,
+        },
+      }
+    ));
 
-    this.setState((prevState) => ({ viewport: { ...prevState.viewport, zoom: maxZoom } }));
+    this.loadPointsWithDebounce({ latitude, longitude, zoom: maxZoom });
+    if (lat !== latitude || lon !== longitude) {
+      this.props.history.push(getRoute({ lat: latitude, lon: longitude }));
+    }
+  };
 
-    window.localStorage.setItem('viewport', JSON.stringify(viewport));
+  handleGeolocate = ({ coords }: CoordsInterface) => {
+    const { longitude, latitude } = coords;
+    const { zoom } = this.state.viewport;
 
-    this.loadPointsWithDebounce(bbox);
+    this.loadPointsWithDebounce({ latitude, longitude, zoom: zoom || MIN_ZOOM_LEVEL });
     this.props.history.push(getRoute({ lat: latitude, lon: longitude }));
   };
 
   handleMapLoad = () => {
-    if (window.localStorage.getItem('viewport')) {
-      const width = document.body.offsetWidth;
-      const height = document.body.offsetHeight;
+    const { lon, lat } = this.props.match?.params;
 
-      const { longitude, latitude, zoom } = JSON.parse(
-        // @ts-ignore
-        window.localStorage.getItem('viewport'),
-      );
-      const bbox = getBbox({
-        longitude,
-        latitude,
-        width,
-        height,
-        zoom: Math.max(MIN_ZOOM_LEVEL, Number(zoom)),
-      });
-      this.loadPoints(bbox);
-      return;
-    }
+    const { zoom } = this.state.viewport;
 
-    navigator.geolocation.getCurrentPosition((position) => {
-      if (
-        !position.coords
-        || !position.coords.latitude
-        || !position.coords.longitude
-      ) {
-        this.props.alert.show('Данные по геопозиции недоступны');
-        return;
-      }
-
-      const width = document.body.offsetWidth;
-      const height = document.body.offsetHeight;
-      const { longitude, latitude } = position.coords;
-      const { zoom } = this.state.viewport;
-
-      this.setState((prevState: { viewport: ViewportInterface }) => {
-        const viewport = {
-          ...prevState.viewport,
-          longitude,
-          latitude,
-          zoom: Math.max(MIN_ZOOM_LEVEL, Number(zoom)),
-        };
-        window.localStorage.setItem('viewport', JSON.stringify(viewport));
-
-        return { viewport };
-      });
-
-      const bbox = getBbox({
-        longitude,
-        latitude,
-        width,
-        height,
-        zoom: Math.max(MIN_ZOOM_LEVEL, Number(zoom)),
-      });
-      this.loadPointsWithDebounce(bbox);
-    });
+    this.loadPoints({ longitude: lon, latitude: lat, zoom: zoom || MIN_ZOOM_LEVEL });
   };
 
   handleClusterClick = (cluster: clusterInterface) => {
@@ -197,13 +140,24 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
     }));
   };
 
-  loadPoints = async (bbox: Number[]) => {
+  loadPoints = async ({ latitude, longitude, zoom }: MapParamsInterface) => {
     if (this.abortController) this.abortController.abort();
     if (typeof window.AbortController === 'function') {
       this.abortController = new window.AbortController();
     }
 
     this.setState({ loading: true });
+
+    const width = document.body.offsetWidth;
+    const height = document.body.offsetHeight;
+
+    const bbox = getBbox({
+      width,
+      height,
+      latitude: Number(latitude),
+      longitude: Number(longitude),
+      zoom: Number(zoom),
+    });
 
     try {
       const response = await fetch(
@@ -260,6 +214,7 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
         <GeolocateControl
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation
+          onGeolocate={this.handleGeolocate}
           onViewportChange={this.handleGeolocateViewportChange}
           label="Мое местоположение"
         />
