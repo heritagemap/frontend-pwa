@@ -117,7 +117,7 @@ const Sidebar = () => {
             </span>
           )}
 
-          {info?.description && <span>{info?.description}</span>}
+          {info?.description && <span>{info?.description.replace(/<(.*?)>/g, '')}</span>}
         </p>
       )}
 
