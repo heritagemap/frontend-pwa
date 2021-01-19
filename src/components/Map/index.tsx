@@ -75,6 +75,7 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
         longitude: this.props.match.params.lon,
       });
     }
+
     const updatedViewport = JSON.stringify(this.state.viewport);
     if (JSON.stringify(prevState.viewport) !== updatedViewport && window?.localStorage) {
       window.localStorage.setItem('viewport', updatedViewport);
@@ -88,7 +89,7 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
   handleGeolocateViewportChange = (viewport: any) => {
     const { longitude, latitude, zoom } = viewport;
     const maxZoom = Math.max(MIN_ZOOM_LEVEL, Number(zoom));
-    const { lat, lon } = this.props.match.params;
+    const { lat, lon, id } = this.props.match.params;
 
     this.setState((prevState) => (
       {
@@ -103,16 +104,17 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
 
     this.loadPointsWithDebounce({ latitude, longitude, zoom: maxZoom });
     if (lat !== latitude || lon !== longitude) {
-      this.props.history.push(getRoute({ lat: latitude, lon: longitude }));
+      this.props.history.push(getRoute({ lat: latitude, lon: longitude, id }));
     }
   };
 
   handleGeolocate = ({ coords }: CoordsInterface) => {
     const { longitude, latitude } = coords;
+    const { id } = this.props.match.params;
     const { zoom } = this.state.viewport;
 
     this.loadPointsWithDebounce({ latitude, longitude, zoom: zoom || MIN_ZOOM_LEVEL });
-    this.props.history.push(getRoute({ lat: latitude, lon: longitude }));
+    this.props.history.push(getRoute({ lat: latitude, lon: longitude, id }));
   };
 
   handleMapLoad = () => {
