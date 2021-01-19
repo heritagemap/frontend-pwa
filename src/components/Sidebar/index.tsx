@@ -7,6 +7,8 @@ import getSource, { SOURCE } from 'utils/getSource';
 import getRoute from 'utils/getRoute';
 import getProtegtion from 'utils/getProtegtion';
 
+import { RESOURCE } from 'constants/map';
+
 import FullInfo from 'components/FullInfo';
 
 import {
@@ -22,8 +24,6 @@ import {
 } from 'icons';
 
 import styles from './Sidebar.module.scss';
-
-const RESOURCE = '/_api/heritage_info';
 
 const Sidebar = () => {
   const [loading, setLoading] = useState(false);
@@ -48,15 +48,12 @@ const Sidebar = () => {
 
       try {
         const response = await fetch(
-          // @ts-ignore
           `${RESOURCE}?id=${id}`,
         );
 
         const text: string = await response.text();
 
         const infoJSON: InfoInterface = JSON.parse(text);
-
-        console.log(infoJSON);
 
         setInfo(infoJSON);
         setSource(
