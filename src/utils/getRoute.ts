@@ -5,11 +5,12 @@ interface RouteParamsInterface {
 }
 
 const getRoute = (params: RouteParamsInterface) => (
-  // @ts-ignore
   Object.keys(params).reduce(
-    (acc: string, item: string) => {
+    // @ts-ignore
+    (acc: string, item: 'lat' | 'lon' | 'id') => {
+      if (!params[item]) return acc;
+
       if (item === 'id') return `${acc}/${params[item]}`;
-      // @ts-ignore
       return `${acc}/${item}/${params[item]}`;
     },
     '',
