@@ -6,7 +6,7 @@
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "4.7.0",
     "@testing-library/jest-dom": "5.11.5",
-    "@types/react-router-dom": "5.1.6",
+    "@types/react-router-dom": "5.1.7",
     "@urbica/react-map-gl": "1.14.2",
     "@urbica/react-map-gl-cluster": "0.2.0",
     "classnames": "2.2.6",
