@@ -8,6 +8,7 @@ import {
 import Map from 'components/Map';
 import DefaultMap from 'components/DefaultMap';
 import Sidebar from 'components/Sidebar';
+import MonumentPage from 'components/MonumentPage';
 
 import './App.scss';
 
@@ -18,6 +19,10 @@ const App = () => (
         <Route path="/lat/:lat/lon/:lon/:id?">
           <Map />
           <Sidebar />
+        </Route>
+
+        <Route path="/:id">
+          <MonumentPage />
         </Route>
 
         <Route exact path="/">

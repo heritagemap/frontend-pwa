@@ -37,4 +37,6 @@ export interface InfoInterface {
   region?: string;
   municipality?: string;
   district?: string;
+  long: number;
+  lat: number;
 }
