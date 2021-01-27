@@ -10,6 +10,7 @@ import Map from 'components/Map';
 import DefaultMap from 'components/DefaultMap';
 import Sidebar from 'components/Sidebar';
 import MonumentPage from 'components/MonumentPage';
+import RedirectWithZoom from 'components/RedirectWithZoom';
 
 import './App.scss';
 
@@ -28,6 +29,10 @@ const App = () => (
         <Route path="/lat/:lat/lon/:lon/zoom/:zoom/:id?">
           <Map />
           <Sidebar />
+        </Route>
+
+        <Route path="/lat/:lat/lon/:lon/:id?">
+          <RedirectWithZoom />
         </Route>
 
         <Route path="/:id">
