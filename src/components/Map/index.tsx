@@ -237,7 +237,7 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
           ref={this.cluster}
         >
           {this.state.monuments.map((group: MonumentInterface[]) => {
-            if (group.length > 0) {
+            if (group.length > 1) {
               return (
                 group.map((item, index) => (
                   <Marker
