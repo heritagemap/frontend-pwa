@@ -27,8 +27,7 @@ export interface MapPropsInterface {
 export interface MyMapParams {
   viewport: ViewportInterface;
   searchValue: string;
-  // monuments: [];
-  sortedMonuments: [][];
+  monuments: [][];
   loading: boolean;
 }
 

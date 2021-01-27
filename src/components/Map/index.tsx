@@ -64,8 +64,7 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
         height: undefined,
       },
       searchValue: '',
-      // monuments: [],
-      sortedMonuments: [],
+      monuments: [],
       loading: false,
     };
   }
@@ -179,7 +178,7 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
       const sortedMonumentsByCoords = getSortedMonumentsByCoords(monuments);
 
       this.setState({
-        sortedMonuments: sortedMonumentsByCoords,
+        monuments: sortedMonumentsByCoords,
       });
 
       if (!monuments || monuments.length === 0) {
@@ -239,11 +238,15 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
           )}
           ref={this.cluster}
         >
-          {this.state.sortedMonuments.map((group: MonumentInterface[]) => {
+          {this.state.monuments.map((group: MonumentInterface[]) => {
             if (group.length > 0) {
               return (
                 group.map((item, index) => (
-                  <Marker key={item.id} longitude={item.lon + index / 10000} latitude={item.lat}>
+                  <Marker
+                    key={item.id}
+                    longitude={item.lon + (index % 3) / 10000}
+                    latitude={item.lat - (Math.floor(index / 3)) / 15000}
+                  >
                     <MarkerButton item={item} />
                   </Marker>
                 ))
