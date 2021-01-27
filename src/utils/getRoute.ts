@@ -6,7 +6,7 @@ interface RouteParamsInterface {
 }
 
 const getRoute = (params: RouteParamsInterface) => (
-  Object.keys(params).reduce(
+  ['lat', 'lon', 'zoom', 'id'].reduce(
     // @ts-ignore
     (acc: string, item: 'lat' | 'lon' | 'id' | 'zoom') => {
       if (!params[item]) return acc;
