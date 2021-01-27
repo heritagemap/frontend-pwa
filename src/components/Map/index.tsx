@@ -176,7 +176,7 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
       const { monuments } = await response.json();
 
       this.setState({
-        monuments: getSortedMonumentsByCoords(monuments),
+        monuments: getSortedMonumentsByCoords(monuments || []),
       });
 
       if (!monuments || monuments.length === 0) {
@@ -250,6 +250,8 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
                 ))
               );
             }
+
+            if (group.length === 0) return null;
 
             return (
               <Marker key={group[0].id} longitude={group[0].lon} latitude={group[0].lat}>
