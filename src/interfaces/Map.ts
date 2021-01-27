@@ -1,4 +1,5 @@
 import { AlertManager } from 'react-alert';
+import MonumentIntarface from './Monument';
 
 export interface ViewportInterface {
   latitude?: number | string,
@@ -27,7 +28,7 @@ export interface MapPropsInterface {
 export interface MyMapParams {
   viewport: ViewportInterface;
   searchValue: string;
-  monuments: [];
+  monuments: MonumentIntarface[][];
   loading: boolean;
 }
 

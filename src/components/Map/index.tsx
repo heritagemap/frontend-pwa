@@ -28,6 +28,8 @@ import {
   MIN_ZOOM_LEVEL,
 } from 'constants/map';
 
+import getSortedMonumentsByCoords from 'utils/getSortedMonumentsByCoords';
+
 import MarkerButton from 'components/MarkerButton';
 
 import styles from './MyMap.module.scss';
@@ -173,7 +175,9 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
 
       const { monuments } = await response.json();
 
-      this.setState({ monuments: monuments || [] });
+      this.setState({
+        monuments: getSortedMonumentsByCoords(monuments || []),
+      });
 
       if (!monuments || monuments.length === 0) {
         this.props.alert.show('Достопримечательности не найдены');
@@ -232,11 +236,29 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
           )}
           ref={this.cluster}
         >
-          {this.state.monuments.map((item: MonumentInterface) => (
-            <Marker key={item.id} longitude={item.lon} latitude={item.lat}>
-              <MarkerButton item={item} />
-            </Marker>
-          ))}
+          {this.state.monuments.map((group: MonumentInterface[]) => {
+            if (group.length > 1) {
+              return (
+                group.map((item, index) => (
+                  <Marker
+                    key={item.id}
+                    longitude={item.lon + (index % 3) / 10000}
+                    latitude={item.lat - (Math.floor(index / 3)) / 15000}
+                  >
+                    <MarkerButton item={item} />
+                  </Marker>
+                ))
+              );
+            }
+
+            if (group.length === 0) return null;
+
+            return (
+              <Marker key={group[0].id} longitude={group[0].lon} latitude={group[0].lat}>
+                <MarkerButton item={group[0]} />
+              </Marker>
+            );
+          })}
         </Cluster>
 
         {this.state.loading && (
