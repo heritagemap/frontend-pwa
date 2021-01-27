@@ -13,12 +13,17 @@ interface MarkerButtonProps {
 }
 
 const MarkerButton: FC<MarkerButtonProps> = ({ item }) => {
-  const params: { id?: string } = useParams();
+  const params: {
+    id?: string,
+    lat: string,
+    lon: string
+  } = useParams();
   const isActive = params?.id === item.id;
   const history = useHistory();
+  const { lat, lon } = params;
 
   const handleMarkerClick = () => {
-    history.push(getRoute({ lat: item.lat, lon: item.lon, id: item.id }));
+    history.push(getRoute({ lat, lon, id: item.id }));
   };
 
   return (
