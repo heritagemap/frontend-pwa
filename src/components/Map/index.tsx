@@ -28,6 +28,8 @@ import {
   MIN_ZOOM_LEVEL,
 } from 'constants/map';
 
+import getSortedMonumentsByCoords from 'utils/getSortedMonumentsByCoords';
+
 import MarkerButton from 'components/MarkerButton';
 
 import styles from './MyMap.module.scss';
@@ -62,7 +64,8 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
         height: undefined,
       },
       searchValue: '',
-      monuments: [],
+      // monuments: [],
+      sortedMonuments: [],
       loading: false,
     };
   }
@@ -173,7 +176,11 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
 
       const { monuments } = await response.json();
 
-      this.setState({ monuments: monuments || [] });
+      const sortedMonumentsByCoords = getSortedMonumentsByCoords(monuments);
+
+      this.setState({
+        sortedMonuments: sortedMonumentsByCoords,
+      });
 
       if (!monuments || monuments.length === 0) {
         this.props.alert.show('Достопримечательности не найдены');
@@ -232,11 +239,25 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
           )}
           ref={this.cluster}
         >
-          {this.state.monuments.map((item: MonumentInterface) => (
-            <Marker key={item.id} longitude={item.lon} latitude={item.lat}>
-              <MarkerButton item={item} />
-            </Marker>
-          ))}
+          {this.state.sortedMonuments.map((group: MonumentInterface[]) => {
+            if (group.length > 0) {
+              return (
+                group.map((item, index) => (
+                  <Marker key={item.id} longitude={item.lon + index / 10000} latitude={item.lat}>
+                    <MarkerButton item={item} />
+                  </Marker>
+                ))
+              );
+            }
+
+            const item = group[0];
+
+            return (
+              <Marker key={item.id} longitude={item.lon} latitude={item.lat}>
+                <MarkerButton item={item} />
+              </Marker>
+            );
+          })}
         </Cluster>
 
         {this.state.loading && (
