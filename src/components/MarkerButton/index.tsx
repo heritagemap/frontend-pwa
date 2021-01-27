@@ -16,14 +16,17 @@ const MarkerButton: FC<MarkerButtonProps> = ({ item }) => {
   const params: {
     id?: string,
     lat: string,
-    lon: string
+    lon: string,
+    zoom: string,
   } = useParams();
   const isActive = params?.id === item.id;
   const history = useHistory();
-  const { lat, lon } = params;
+  const { lat, lon, zoom } = params;
 
   const handleMarkerClick = () => {
-    history.push(getRoute({ lat, lon, id: item.id }));
+    history.push(getRoute({
+      lat, lon, zoom, id: item.id,
+    }));
   };
 
   return (
