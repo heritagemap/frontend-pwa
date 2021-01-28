@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import { useAlert } from 'react-alert';
-import { DEFAULT_LAT, DEFAULT_LON } from 'constants/map';
+import { DEFAULT_LAT, DEFAULT_LON, DEFAULT_ZOOM } from 'constants/map';
 
 const DefaultMap = () => {
   const history = useHistory();
@@ -17,7 +17,7 @@ const DefaultMap = () => {
         ) {
           alert.error('Данные геопозиции недоступны');
         } else {
-          history.push(`/lat/${position.coords.latitude}/lon/${position.coords.longitude}`);
+          history.push(`/lat/${position.coords.latitude}/lon/${position.coords.longitude}/zoom/${DEFAULT_ZOOM}`);
         }
       });
     };
@@ -25,7 +25,7 @@ const DefaultMap = () => {
     checkCurrentPosition();
   });
 
-  return (<Redirect to={`/lat/${DEFAULT_LAT}/lon/${DEFAULT_LON}`} />);
+  return (<Redirect to={`/lat/${DEFAULT_LAT}/lon/${DEFAULT_LON}/zoom/${DEFAULT_ZOOM}`} />);
 };
 
 export default DefaultMap;

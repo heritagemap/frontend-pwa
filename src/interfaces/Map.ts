@@ -4,7 +4,7 @@ import MonumentIntarface from './Monument';
 export interface ViewportInterface {
   latitude?: number | string,
   longitude?: number | string,
-  zoom?: number,
+  zoom?: number | string,
   bearing?: number,
   pitch?: number,
   width?: number,
@@ -20,7 +20,12 @@ export interface MapParamsInterface {
 export interface MapPropsInterface {
   alert: AlertManager,
   match: {
-    params: { lat: string; lon: string; id?: string }
+    params: {
+      lat: string;
+      lon: string;
+      zoom: string;
+      id?: string
+    }
   },
   history: { push: (route: string) => void },
 }
