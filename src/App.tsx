@@ -12,6 +12,8 @@ import Sidebar from 'components/Sidebar';
 import MonumentPage from 'components/MonumentPage';
 import RedirectWithZoom from 'components/RedirectWithZoom';
 
+import { DEFAULT_ZOOM } from 'constants/map';
+
 import './App.scss';
 
 const App = () => (
@@ -19,11 +21,11 @@ const App = () => (
     <main>
       <Switch>
         <Route path="/moscow">
-          <Redirect to="/lat/55.744654/lon/37.624991/zoom/12" />
+          <Redirect to={`/lat/55.744654/lon/37.624991/zoom/${DEFAULT_ZOOM}`} />
         </Route>
 
         <Route path="/nizhny-novgorod">
-          <Redirect to="/lat/56.301011/lon/43.995229/zoom/12" />
+          <Redirect to={`/lat/56.301011/lon/43.995229/zoom/${DEFAULT_ZOOM}`} />
         </Route>
 
         <Route path="/lat/:lat/lon/:lon/zoom/:zoom/:id?">
