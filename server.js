@@ -41,14 +41,14 @@ app.use('/_api/heritage_info', createProxyMiddleware({
   changeOrigin: true,
 }));
 
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
 Object.keys(shortRouteToPages).map((route) => {
   app.get(route, function(req, res) {
     res.redirect(shortRouteToPages[route]);
   });
+});
+
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
 app.listen(9000);
