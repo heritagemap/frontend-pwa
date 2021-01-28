@@ -28,7 +28,6 @@ const App = () => (
           <Redirect to={`/lat/56.301011/lon/43.995229/zoom/${DEFAULT_ZOOM}`} />
         </Route>
 
-
         <Route path="/arzamas">
           <Redirect to={`/lat/55.386373/lon/43.817099/zoom/${DEFAULT_ZOOM}`} />
         </Route>
