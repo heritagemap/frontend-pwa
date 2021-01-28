@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
 import { InfoInterface } from 'interfaces/FullInfo';
+import { RouteInterface } from 'interfaces/Route';
 import getStatus from 'utils/getStatus';
 import getSource, { SOURCE } from 'utils/getSource';
 import getRoute from 'utils/getRoute';
@@ -34,11 +35,12 @@ const Sidebar = () => {
     id,
     lat,
     lon,
-  }: { id?: string | number; lat?: string; lon?: string } = useParams();
+    zoom,
+  }: RouteInterface = useParams();
   const history = useHistory();
 
   const handleClose = () => {
-    history.push(getRoute({ lat, lon }));
+    history.push(getRoute({ lat, lon, zoom }));
   };
 
   useEffect(() => {

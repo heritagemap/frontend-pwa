@@ -51,13 +51,13 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
   constructor(props: MapPropsInterface) {
     super(props);
 
-    const { lat, lon } = this.props.match.params;
+    const { lat, lon, zoom } = this.props.match.params;
 
     this.state = {
       viewport: {
         latitude: lat,
         longitude: lon,
-        zoom: 15,
+        zoom,
         bearing: 0,
         pitch: 0,
         width: undefined,
@@ -106,7 +106,9 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
 
     this.loadPointsWithDebounce({ latitude, longitude, zoom: maxZoom });
     if (lat !== latitude || lon !== longitude) {
-      this.props.history.push(getRoute({ lat: latitude, lon: longitude, id }));
+      this.props.history.push(getRoute({
+        lat: latitude, lon: longitude, zoom: maxZoom, id,
+      }));
     }
   };
 
@@ -114,9 +116,19 @@ class MyMap extends Component<MapPropsInterface, MyMapParams> {
     const { longitude, latitude } = coords;
     const { id } = this.props.match.params;
     const { zoom } = this.state.viewport;
+    const currentZoom = zoom || MIN_ZOOM_LEVEL;
 
-    this.loadPointsWithDebounce({ latitude, longitude, zoom: zoom || MIN_ZOOM_LEVEL });
-    this.props.history.push(getRoute({ lat: latitude, lon: longitude, id }));
+    this.loadPointsWithDebounce({ latitude, longitude, zoom: currentZoom });
+    this.props.history.push(
+      getRoute(
+        {
+          lat: latitude,
+          lon: longitude,
+          id,
+          zoom: currentZoom,
+        },
+      ),
+    );
   };
 
   handleMapLoad = () => {

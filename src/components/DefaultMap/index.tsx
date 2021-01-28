@@ -7,7 +7,12 @@ const DefaultMap = () => {
   const prevPosition = JSON.parse(localStorage.getItem('viewport') || '{}');
 
   if (prevPosition.latitude && prevPosition.longitude) {
-    return (<Redirect to={`/lat/${prevPosition.latitude}/lon/${prevPosition.longitude}`} />);
+    const { latitude, longitude, zoom } = prevPosition;
+    return (
+      <Redirect
+        to={`/lat/${latitude}/lon/${longitude}/zoom/${zoom}`}
+      />
+    );
   }
 
   return (<FirstLoadingMap />);

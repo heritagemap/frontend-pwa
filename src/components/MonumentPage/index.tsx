@@ -40,7 +40,7 @@ const MonumentPage = () => {
   }
 
   return (
-    <Redirect to={`/lat/${info?.lat}/lon/${info?.long}/${params.id}`} />
+    <Redirect to={`/lat/${info?.lat}/lon/${info?.long}/zoom/12/${params.id}`} />
   );
 };
 
