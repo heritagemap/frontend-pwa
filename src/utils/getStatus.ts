@@ -26,7 +26,7 @@ const IS_OFFICIAL = {
 };
 
 const getStatus = (type: Type, knid?: string): string => {
-  if (!type || !knid || !knid[2]) return '';
+  if (!knid || !knid[2]) return '';
 
   // @ts-ignore
   return TYPE_OF_MONUMENT[type + IS_OFFICIAL[knid[2]]] || '';
