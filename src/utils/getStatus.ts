@@ -25,9 +25,11 @@ const IS_OFFICIAL = {
   4: '0',
 };
 
-const getStatus = (type: Type, knid: string) => (
+const getStatus = (type: Type, knid?: string): string => {
+  if (!knid || !knid[2]) return '';
+
   // @ts-ignore
-  TYPE_OF_MONUMENT[type + IS_OFFICIAL[knid[2]]] || ''
-);
+  return TYPE_OF_MONUMENT[type + IS_OFFICIAL[knid[2]]] || '';
+};
 
 export default getStatus;
