@@ -76,7 +76,7 @@
     "@types/node": "12.19.3",
     "@types/react": "16.9.56",
     "@types/react-alert": "5.2.0",
-    "@types/react-dom": "16.9.9",
+    "@types/react-dom": "17.0.14",
     "@types/react-map-gl": "5.2.9",
     "@typescript-eslint/eslint-plugin": "4.9.0",
     "eslint-config-airbnb-typescript": "12.0.0",
