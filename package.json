@@ -23,7 +23,7 @@
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.1",
     "stylelint-scss": "3.18.0",
-    "supercluster": "6.0.2",
+    "supercluster": "7.1.5",
     "typescript": "3.9.7",
     "unfetch": "4.2.0",
     "x2js": "3.4.0"
