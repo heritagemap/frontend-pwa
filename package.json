@@ -72,7 +72,7 @@
     "@types/classnames": "2.2.11",
     "@types/jest": "26.0.15",
     "@types/lodash": "4.14.165",
-    "@types/mapbox-gl": "1.12.5",
+    "@types/mapbox-gl": "2.7.21",
     "@types/node": "12.19.3",
     "@types/react": "16.9.56",
     "@types/react-alert": "5.2.0",
