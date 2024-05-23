@@ -37,7 +37,7 @@ app.use('/_api/heritage', createProxyMiddleware({
 }));
 
 app.use('/_api/heritage_info', createProxyMiddleware({
-  target: 'https://ru_monuments.toolforge.org/wikivoyage1.php',
+  target: 'https://ru-monuments.toolforge.org/wikivoyage1.php',
   changeOrigin: true,
 }));
 
