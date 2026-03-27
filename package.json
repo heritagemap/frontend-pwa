@@ -4,7 +4,7 @@
   "homepage": "/",
   "private": true,
   "dependencies": {
-    "@mapbox/mapbox-gl-geocoder": "4.7.0",
+    "@mapbox/mapbox-gl-geocoder": "4.7.4",
     "@testing-library/jest-dom": "5.11.5",
     "@types/react-router-dom": "5.1.7",
     "@urbica/react-map-gl": "1.14.2",
